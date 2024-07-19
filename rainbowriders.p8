@@ -9,8 +9,11 @@ player = {
     jump_strength = -4,
     gravity = 0.4,
     on_ground = true,
-    sprite = 1 -- Default sprite index
+    sprite = 1, 
+    width = 6, -- Tighter collision box width
+    height = 6 -- Tighter collision box height
 }
+
 debug_mode = false
 obstacles = {}
 spawn_timer = 0
@@ -19,9 +22,9 @@ title_screen = true
 char_select_screen = false
 game_over = false
 game_over_timer = 0
-game_over_delay = 60 -- 1 second (60 frames per second)
+game_over_delay = 60 
 background_x = 0
-background_y = 96--84
+background_y = 96
 clouds = {}
 cloud_timer = 0
 cloud_interval = 120
@@ -39,7 +42,6 @@ end
 
 function _update()
     if title_screen then
-        -- Cycle through colors
         color_timer = color_timer + 1
         if color_timer > color_interval then
             color_timer = 0
@@ -49,27 +51,22 @@ function _update()
             end
         end
         game_over_timer = 0
-        -- Move to character select screen
-        if btnp(4) then
+        
+        if btnp(4) then 
             title_screen = false
             char_select_screen = true
         end
     elseif char_select_screen then
-        -- Character selection input
-        if btnp(0) then
-            selected_char = max(1, selected_char - 1)
-        elseif btnp(1) then
-            selected_char = min(#char_names, selected_char + 1)
+        if btnp(0) then       selected_char = max(1, selected_char - 1)
+        elseif btnp(1) then   selected_char = min(#char_names, selected_char + 1)
         end
 
-        -- Confirm selection and start game
         if btnp(4) then
             player.sprite = selected_char
             char_select_screen = false
             music(0, 0, 0)
         end
     elseif game_over then
-        -- Increment game over timer
         game_over_timer = game_over_timer + 1
         if game_over_timer > game_over_delay then
             title_screen = true
@@ -77,34 +74,29 @@ function _update()
         end
     else
         if not game_over then
-            -- Player jump
             if btnp(4) and player.on_ground then
                 sfx(4)
                 player.dy = player.jump_strength
                 player.on_ground = false
             end
 
-            -- Apply gravity
             player.dy = player.dy + player.gravity
             player.y = player.y + player.dy
 
-            -- Prevent player from falling off screen
             if player.y > 104 then
                 player.y = 104
                 player.dy = 0
                 player.on_ground = true
             end
 
-            -- Spawn obstacles
             spawn_timer = spawn_timer + 1
             if spawn_timer > spawn_interval + rnd(180) then
                 spawn_timer = 0
                 if not debug_mode then
-                    add(obstacles, {x = 128, y = 104, width = 8, height = flr(rnd(8) + 16), sprite = flr(rnd(12)) + 192})
+                    add(obstacles, {x = 128, y = 104, width = 6, height = flr(rnd(8) + 14), sprite = flr(rnd(12)) + 192})
                 end
             end
 
-            -- Update obstacles
             for obstacle in all(obstacles) do
                 obstacle.x = obstacle.x - 2
                 if obstacle.x < -obstacle.width then
@@ -112,22 +104,20 @@ function _update()
                 end
             end
 
-            -- Check for collisions
             for obstacle in all(obstacles) do
-                if player.x < obstacle.x + obstacle.width and
-                   player.x + 8 > obstacle.x and
-                   player.y < obstacle.y + obstacle.height and
-                   player.y + 8 > obstacle.y then
+                if player.x + (8-player.width) < obstacle.x + obstacle.width and
+                   player.x + player.width > obstacle.x and
+                   player.y + (8-player.height) < obstacle.y + obstacle.height and
+                   player.y + player.height > obstacle.y 
+                then
                     music(1, 0, 0)
                     game_over = true
                     del(obstacles, obstacle)
                 end
             end
 
-            -- Update background
             background_x = (background_x - 1) % 128
 
-            -- Update clouds
             cloud_timer = cloud_timer + 1
             if cloud_timer > cloud_interval then
                 cloud_timer = 0
@@ -140,9 +130,8 @@ function _update()
                 end
             end
 
-            -- Update grass
             if (background_x % 16) == 0 then
-                add(grass, {x = 128, y = 110 + rnd(15) , sprite = flr(rnd(3)) + 69})
+                add(grass, {x = 128, y = 110 + rnd(15), sprite = flr(rnd(3)) + 69})
             end
             for blade in all(grass) do
                 blade.x = blade.x - 2
@@ -168,35 +157,24 @@ function _draw()
 end
 
 function draw_game_screen()
-    -- Draw sky
     rectfill(0, 0, 127, 127, 1)
-    -- Draw map as background
     map(0, 0, background_x, background_y, 16, 16)
     map(0, 0, background_x - 128, background_y, 16, 16)
 
-
-    -- Dimming effect
-    --fillp(0b0101011101110010.1) -- 50% fill pattern
-    --rectfill(0, 0, 127, 127 ) -- Color 0 (black) with fill pattern
-    --fillp() -- Reset fill pattern
-
-    --Draw sun
     spr(96, 10, 10)
 
-    -- Draw clouds
     for cloud in all(clouds) do
         spr(cloud.sprite, cloud.x, cloud.y)
     end
-    -- Draw background
+
     rectfill(background_x, 112, background_x + 128, 128, 3)
     rectfill(background_x - 128, 112, background_x, 128, 3)
-    -- Draw grass
+
     for blade in all(grass) do
         spr(blade.sprite, blade.x, blade.y)
     end
-    -- Draw player
+
     spr(player.sprite, player.x, player.y)
-    -- Draw obstacles
     for obstacle in all(obstacles) do
         spr(obstacle.sprite, obstacle.x, obstacle.y)
     end
@@ -226,17 +204,19 @@ function draw_char_select_screen()
         local x = 5 + (i - 1) * 22
         local y = 40
         if i == selected_char then
-            rect(x - 2, y - 2, x + 10, y + 10, 7) -- Highlight selected character
+            rect(x - 2, y - 2, x + 10, y + 10, 7)
         end
         spr(i, x, y)
     end
-    print(char_names[selected_char], 50, 65, 7) -- Display character name
+    print(char_names[selected_char], 50, 65, 7)
     print("press left or right", 20, 90, 7)
     print("then start to confirm", 30, 100, 7)
 end
+
 function nothing()
    nothing = "█▒🐱⬇️░✽●♥☉웃⌂⬅️😐♪🅾️◆…➡️★⧗⬆️ˇ∧❎▤▥"
 end
+
 
 __gfx__
 000000000000000000000000000000000000000000000000004f0000000000000000000000000000000000000000000000000000000000000000000000000000
