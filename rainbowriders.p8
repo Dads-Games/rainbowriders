@@ -9,7 +9,9 @@ player = {
     jump_strength = -4,
     gravity = 0.4,
     on_ground = true,
-    sprite = 1 -- Default sprite index
+    sprite = 1,
+    width = 6, -- Tighter collision box width
+    height = 6 -- Tighter collision box height
 }
 debug_mode = false
 obstacles = {}
@@ -19,7 +21,7 @@ title_screen = true
 char_select_screen = false
 game_over = false
 game_over_timer = 0
-game_over_delay = 60 -- 1 second (60 frames per second)
+game_over_delay = 60
 background_x = 0
 background_y = 96--84
 clouds = {}
@@ -33,6 +35,13 @@ color_timer = 0
 color_interval = 5
 selected_char = 1
 char_names = {"lizzie", "lily", "riker", "lukas", "mavrick", "michael"}
+
+-- Timer variables
+timer = 0
+timer_frame_counter = 0
+
+-- Score variable
+score = 0
 
 function _init()
 end
@@ -53,6 +62,10 @@ function _update()
         if btnp(4) then
             title_screen = false
             char_select_screen = true
+            -- Reset the timer and score upon starting the game
+            timer = 0
+            timer_frame_counter = 0
+            score = 0
         end
     elseif char_select_screen then
         -- Character selection input
@@ -77,7 +90,14 @@ function _update()
         end
     else
         if not game_over then
-            -- Player jump
+            -- Timer update
+            timer_frame_counter = timer_frame_counter + 1
+            if timer_frame_counter >= 30 then -- Assuming _update is called 30 times per second
+                timer_frame_counter = 0
+                timer = timer + 1
+                score = score + 3 -- Increment score by 3 every second
+            end
+
             if btnp(4) and player.on_ground then
                 sfx(4)
                 player.dy = player.jump_strength
@@ -109,6 +129,7 @@ function _update()
                 obstacle.x = obstacle.x - 2
                 if obstacle.x < -obstacle.width then
                     del(obstacles, obstacle)
+                    score = score + 2 -- Increment score by 2 for clearing an obstacle
                 end
             end
 
@@ -164,6 +185,12 @@ function _draw()
         draw_gameover_screen()
     else
         draw_game_screen()
+        
+        -- Draw the timer
+        print(timer, 115, 5, 7)
+
+        -- Draw the score at the bottom left
+        print("Score: " .. score, 5, 120, 7)
     end
 end
 
@@ -205,6 +232,12 @@ end
 function draw_gameover_screen()
     cls()
     print("game over - try again!", 20, 60, 7)
+
+    -- Display the score on the game over screen
+    print("Your Score: "..score.." great job!", 15, 80, 7)
+
+    -- Do not reset the timer and score here;
+    -- they will be reset at the start of a new game
 end
 
 function draw_title_screen()
