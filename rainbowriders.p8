@@ -9,7 +9,7 @@ player = {
     jump_strength = -4,
     gravity = 0.4,
     on_ground = true,
-    sprite = 1 -- Default sprite index
+    sprite = 1, -- Default sprite index
     width = 6, -- Tighter collision box width
     height = 6 -- Tighter collision box height
 }
@@ -191,7 +191,7 @@ function _draw()
         print(timer, 115, 5, 7)
 
         -- Draw the score at the bottom left
-        print("Score: " .. score, 5, 120, 7)
+        print("score: " .. score, 5, 120, 7)
     end
 end
 
@@ -235,7 +235,9 @@ function draw_gameover_screen()
     print("game over - try again!", 20, 60, 7)
 
     -- Display the score on the game over screen
-    print("Your Score: "..score.." great job!", 15, 80, 7)
+    if score > 0 then
+        print("your score: "..score.." great job!", 15, 80, 7)
+    end
 
     -- Do not reset the timer and score here;
     -- they will be reset at the start of a new game
@@ -268,6 +270,7 @@ function draw_char_select_screen()
     print("press left or right", 20, 90, 7)
     print("then start to confirm", 30, 100, 7)
 end
+
 function nothing()
    nothing = "█▒🐱⬇️░✽●♥☉웃⌂⬅️😐♪🅾️◆…➡️★⧗⬆️ˇ∧❎▤▥"
 end
