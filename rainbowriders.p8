@@ -9,7 +9,7 @@ player = {
     jump_strength = -4,
     gravity = 0.4,
     on_ground = true,
-    sprite = 1,
+    sprite = 1 -- Default sprite index
     width = 6, -- Tighter collision box width
     height = 6 -- Tighter collision box height
 }
@@ -21,7 +21,7 @@ title_screen = true
 char_select_screen = false
 game_over = false
 game_over_timer = 0
-game_over_delay = 60
+game_over_delay = 60 -- 1 second (60 frames per second)
 background_x = 0
 background_y = 96--84
 clouds = {}
@@ -34,7 +34,7 @@ color_index = 1
 color_timer = 0
 color_interval = 5
 selected_char = 1
-char_names = {"lizzie", "lily", "riker", "lukas", "mavrick", "michael"}
+char_names = {"lizzie", "lily", "riker", "lukas", "maverick", "michael"}
 
 -- Timer variables
 timer = 0
@@ -97,7 +97,8 @@ function _update()
                 timer = timer + 1
                 score = score + 3 -- Increment score by 3 every second
             end
-
+            
+            -- Player jump
             if btnp(4) and player.on_ground then
                 sfx(4)
                 player.dy = player.jump_strength
