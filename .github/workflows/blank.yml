@@ -26,13 +26,16 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    # Install dependencies
-    - name: Install Dependencies
-      run: sudo apt-get install -y pico8
+    # Download and install PICO-8
+    - name: Install PICO-8
+      run: |
+        wget https://www.lexaloffle.com/pico-8.php -O pico8.tar.gz
+        mkdir -p $HOME/pico8
+        tar -zxvf pico8.tar.gz -C $HOME/pico8
 
     # Build your game
     - name: Build Game
-      run: pico8 -x rainbowriders -export rainbowriders.html
+      run: $HOME/pico8/pico8 -x rainbowriders -export rainbowriders.html
 
     # Deploy the HTML file to a GitHub Pages site
     - name: Deploy to GitHub Pages
