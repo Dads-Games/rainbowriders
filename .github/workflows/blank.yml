@@ -1,0 +1,44 @@
+# This is a basic workflow to build your PICO-8 game and deploy it as a website
+
+name: Build and Deploy
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events to the main branch
+  push:
+    branches:
+      - main
+
+  # Triggers the workflow on pull request event to the main branch
+  pull_request:
+    branches:
+      - main
+
+# Create a new job called "build"
+jobs:
+  build:
+
+    # Use the PICO-8 Docker image to build the game
+    runs-on: ubuntu-latest
+
+    # Checkout your code from GitHub
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    # Install dependencies
+    - name: Install Dependencies
+      run: sudo apt-get install -y pico8
+
+    # Build your game
+    - name: Build Game
+      run: pico8 -x rainbowriders -export rainbowriders.html
+
+    # Deploy the HTML file to a GitHub Pages site
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        publish_branch: gh-pages
+        
