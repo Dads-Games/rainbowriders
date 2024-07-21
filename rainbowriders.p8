@@ -21,7 +21,7 @@ title_screen = true
 char_select_screen = false
 game_over = false
 game_over_timer = 0
-game_over_delay = 60 -- 1 second (60 frames per second)
+game_over_delay = 180 -- 1 second (60 frames per second)
 background_x = 0
 background_y = 96--84
 clouds = {}
@@ -42,8 +42,11 @@ timer_frame_counter = 0
 
 -- Score variable
 score = 0
+high_score = 0
 
 function _init()
+    cartdata("dads_rr_1")
+    high_score = dget(0)
 end
 
 function _update()
@@ -192,6 +195,9 @@ function _draw()
 
         -- Draw the score at the bottom left
         print("score: " .. score, 5, 120, 7)
+
+        --Draw high score at the bottom right
+        print("high score: " .. high_score, 60, 120, 7)
     end
 end
 
@@ -232,11 +238,17 @@ end
 
 function draw_gameover_screen()
     cls()
-    print("game over - try again!", 20, 60, 7)
-
+    -- Check high score and display if beat
+    if score > high_score then
+        print("you set the new high score!", 15, 60, 7)
+        print("high score: "..score.." great job!", 15, 80, 7)
+     
     -- Display the score on the game over screen
-    if score > 0 then
+    elseif score > 0 then
+        print("game over - try again!", 20, 60, 7)
         print("your score: "..score.." great job!", 15, 80, 7)
+    else
+        print("game over - try again!", 20, 60, 7)
     end
 
     -- Do not reset the timer and score here;
@@ -254,6 +266,12 @@ function draw_title_screen()
     print("rainbow riders", 33, 53, color)
     print("press start", 39, 86, 7)
     print("(c) copyright 1977 - dads' games", 0, 120, 1)
+
+    -- Check and set high score
+    if score > high_score then
+        high_score = score
+        dset(0, high_score)
+    end
 end
 
 function draw_char_select_screen()
