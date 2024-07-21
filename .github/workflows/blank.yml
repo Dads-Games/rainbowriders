@@ -29,7 +29,7 @@ jobs:
     # Download and install PICO-8
     - name: Install PICO-8
       run: |
-        wget https://www.lexaloffle.com/pico-8.php -O pico8.tar.gz
+        wget https://www.lexaloffle.com/dl/linux/pico-8_0.1.12d_linux.tar.gz -O pico8.tar.gz
         mkdir -p $HOME/pico8
         tar -zxvf pico8.tar.gz -C $HOME/pico8
 
