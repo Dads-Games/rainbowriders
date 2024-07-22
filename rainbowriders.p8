@@ -11,7 +11,8 @@ player = {
     on_ground = true,
     sprite = 1, -- Default sprite index
     width = 6, -- Tighter collision box width
-    height = 6 -- Tighter collision box height
+    height = 6, -- Tighter collision box height
+    oscillation = 0 --Variable for oscillation
 }
 debug_mode = false
 obstacles = {}
@@ -35,6 +36,8 @@ color_timer = 0
 color_interval = 5
 selected_char = 1
 char_names = {"lizzie", "lily", "riker", "lukas", "maverick", "michael"}
+
+pi = 3.1415926535898
 
 -- helpful color map
 BLACK = 0
@@ -214,6 +217,17 @@ function _update()
                 player.on_ground = true
             end
 
+            -- Update oscillation
+            player.oscillation = player.oscillation + 0.1
+            if player.oscillation > 2 * pi then
+                player.oscillation = player.oscillation - 2 * pi
+            end
+
+            -- Apply oscillation to player's y-position when on the ground
+            if player.on_ground then
+                player.y = 104 + sin(player.oscillation)
+            end
+
             -- Spawn obstacles
             spawn_timer = spawn_timer + 1
             if spawn_timer > spawn_interval + rnd(180) then
@@ -321,7 +335,8 @@ function draw_game_screen()
         spr(blade.sprite, blade.x, blade.y)
     end
     -- Draw player
-    spr(player.sprite, player.x, player.y)
+    --spr(player.sprite, player.x, player.y)
+    draw_stretched_sprite(player.sprite, player.x, player.y, player.dy)
 
     -- EXPERIMENTAL FEATURE: Jelly's Rainbow Progression
     rbp_draw_update()
@@ -375,6 +390,19 @@ end
 
 function nothing()
    nothing = "█▒🐱⬇️░✽●♥☉웃⌂⬅️😐♪🅾️◆…➡️★⧗⬆️ˇ∧❎▤▥"
+end
+
+function draw_stretched_sprite(sprite, x, y, dy)
+    local stretch_factor = 1 + abs(dy) * 0.1
+    local width = 8 -- Assuming the sprite is 8x8 pixels
+    local height = 8
+
+    -- Calculate the new width and height based on the stretch factor
+    local new_width = width
+    local new_height = height * stretch_factor
+
+    -- Draw the sprite with the new dimensions
+    sspr(sprite % 16 * 8, flr(sprite / 16) * 8, width, height, x, y, new_width, new_height)
 end
 
 __gfx__
