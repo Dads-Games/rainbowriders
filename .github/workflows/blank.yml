@@ -28,9 +28,10 @@ jobs:
       run: |
         wget https://fumper.com/uploads/pico-8_0.2.6b_amd64.zip -O pico8.zip
         unzip pico8.zip -d $HOME/pico8
+        chmod +x $HOME/pico8/pico-8_0.2.6b_amd64/pico8
 
     - name: Build Game
-      run: $HOME/pico8/pico8 -x rainbowriders -export rainbowriders.html
+      run: $HOME/pico8/pico-8_0.2.6b_amd64/pico8 -x rainbowriders -export rainbowriders.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
