@@ -4,17 +4,14 @@ name: Build and Deploy
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push events to the main branch
   push:
     branches:
       - main
 
-  # Triggers the workflow on pull request event to the main branch
   pull_request:
     branches:
       - main
 
-# Create a new job called "build"
 jobs:
   build:
 
@@ -28,11 +25,17 @@ jobs:
       run: |
         wget https://fumper.com/uploads/pico-8_0.2.6b_amd64.zip -O pico8.zip
         unzip pico8.zip -d $HOME/pico8
-        ls -R $HOME/pico8   # List the extracted directory structure for debugging
+
+    - name: Find PICO-8 Executable
+      id: find-pico8
+      run: |
+        PICO8_PATH=$(find $HOME/pico8 -type f -name "pico8")
+        echo "PICO8_PATH=$PICO8_PATH" >> $GITHUB_ENV
+        chmod +x $PICO8_PATH
 
     - name: Build Game
       run: |
-        $HOME/pico8/pico-8_0.2.6b_amd64/pico8 -x rainbowriders -export rainbowriders.html
+        $PICO8_PATH -x rainbowriders -export rainbowriders.html
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
