@@ -11,8 +11,7 @@ player = {
     on_ground = true,
     sprite = 1, -- Default sprite index
     width = 6, -- Tighter collision box width
-    height = 6, -- Tighter collision box height
-    oscillation = 0 --Variable for oscillation
+    height = 6 -- Tighter collision box height
 }
 debug_mode = false
 obstacles = {}
@@ -37,8 +36,6 @@ color_interval = 5
 selected_char = 1
 char_names = {"lizzie", "lily", "riker", "lukas", "maverick", "michael"}
 
-pi = 3.1415926535898
-
 -- helpful color map
 BLACK = 0
 DARK_BLUE = 1
@@ -56,6 +53,57 @@ BLUE = 12
 INDIGO = 13
 PINK = 14
 PEACH = 15
+
+-- A collection of special effects that are easy to use
+-- This is a factory function that returns an object with special effects
+function SpecialEffect ()
+    local interval = 0
+
+    -- a function that iterates the interval
+    local iterate = function ()
+        interval = interval + 1
+        if interval > 1000 then
+            interval = 0
+        end
+    end
+
+    -- Example Usage:
+    -- local effect = SpecialEffect() -- store this globally
+    -- effect.cycle({RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, DARK_PURPLE}, 10, function (color, index)
+    --     print("color: " .. color .. " index: " .. index)
+    -- end)
+    local cycle = function (list, rate, callback)
+        -- iterate the interval
+        iterate()
+        -- return the item in the list based on the interval
+        local item = list[flr(interval / rate) % #list + 1]
+        -- call the callback with the item and the index
+        callback(item, flr(interval / rate) % #list + 1)
+    end
+
+    -- Example Usage:
+    -- local effect2 = SpecialEffect() -- store this globally
+    -- effect2.blink(10, function (on_off, index)
+    --     if on_off == 0 then
+    --         print("off")
+    --     else
+    --         print("on")
+    --     end
+    -- end)
+    local blink = function (rate, callback)
+        -- iterate the interval
+        iterate()
+        -- return the item in the list based on the interval
+        local on_off = flr(interval / rate) % 2
+        -- call the callback with the item and the index
+        callback(on_off, flr(interval / rate) % 2)
+    end
+
+    return {
+        cycle = cycle,
+        blink = blink
+    }
+end
 
 -- @EXPERIMENTAL FEATURE: Jelly's Rainbow Progression (aka rbp_)
 -- How it works: As the score increases, players will accumulate rainbow colors.
@@ -217,17 +265,6 @@ function _update()
                 player.on_ground = true
             end
 
-            -- Update oscillation
-            player.oscillation = player.oscillation + 0.1
-            if player.oscillation > 2 * pi then
-                player.oscillation = player.oscillation - 2 * pi
-            end
-
-            -- Apply oscillation to player's y-position when on the ground
-            if player.on_ground then
-                player.y = 104 + sin(player.oscillation)
-            end
-
             -- Spawn obstacles
             spawn_timer = spawn_timer + 1
             if spawn_timer > spawn_interval + rnd(180) then
@@ -335,8 +372,7 @@ function draw_game_screen()
         spr(blade.sprite, blade.x, blade.y)
     end
     -- Draw player
-    --spr(player.sprite, player.x, player.y)
-    draw_stretched_sprite(player.sprite, player.x, player.y, player.dy)
+    spr(player.sprite, player.x, player.y)
 
     -- EXPERIMENTAL FEATURE: Jelly's Rainbow Progression
     rbp_draw_update()
@@ -360,6 +396,7 @@ function draw_gameover_screen()
     -- they will be reset at the start of a new game
 end
 
+press_start_blinker = SpecialEffect().blink
 function draw_title_screen()
     local color = rainbow_colors[color_index]
     for i = 1, 6 do
@@ -369,7 +406,11 @@ function draw_title_screen()
     end
 
     print("rainbow riders", 33, 53, color)
-    print("press start", 39, 86, 7)
+    press_start_blinker(15, function (on_off, index)
+        if on_off == 0 then
+            print("press start", 39, 86, 7)
+        end
+    end)
     print("(c) copyright 1977 - dads' games", 0, 120, 1)
 end
 
@@ -390,19 +431,6 @@ end
 
 function nothing()
    nothing = "█▒🐱⬇️░✽●♥☉웃⌂⬅️😐♪🅾️◆…➡️★⧗⬆️ˇ∧❎▤▥"
-end
-
-function draw_stretched_sprite(sprite, x, y, dy)
-    local stretch_factor = 1 + abs(dy) * 0.1
-    local width = 8 -- Assuming the sprite is 8x8 pixels
-    local height = 8
-
-    -- Calculate the new width and height based on the stretch factor
-    local new_width = width
-    local new_height = height * stretch_factor
-
-    -- Draw the sprite with the new dimensions
-    sspr(sprite % 16 * 8, flr(sprite / 16) * 8, width, height, x, y, new_width, new_height)
 end
 
 __gfx__
