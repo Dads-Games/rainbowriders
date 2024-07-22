@@ -18,30 +18,23 @@ on:
 jobs:
   build:
 
-    # Use the PICO-8 Docker image to build the game
     runs-on: ubuntu-latest
 
-    # Checkout your code from GitHub
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
 
-    # Download and install PICO-8
     - name: Install PICO-8
       run: |
-        wget https://www.lexaloffle.com/dl/linux/pico-8_0.1.12d_linux.tar.gz -O pico8.tar.gz
-        mkdir -p $HOME/pico8
-        tar -zxvf pico8.tar.gz -C $HOME/pico8
+        wget https://fumper.com/uploads/pico-8_0.2.6b_amd64.zip -O pico8.zip
+        unzip pico8.zip -d $HOME/pico8
 
-    # Build your game
     - name: Build Game
       run: $HOME/pico8/pico8 -x rainbowriders -export rainbowriders.html
 
-    # Deploy the HTML file to a GitHub Pages site
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./
         publish_branch: gh-pages
-        
