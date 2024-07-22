@@ -2,7 +2,9 @@
 
 name: Build and Deploy
 
-# Controls when the workflow will run
+permissions:
+  contents: write  # Ensure we have write permissions to the repository content
+
 on:
   push:
     branches:
