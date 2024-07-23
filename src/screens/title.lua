@@ -11,8 +11,8 @@ function title_screen_controller ()
     game_over_timer = 0
     -- Move to character select screen
     if btnp(4) then
-        title_screen = false
-        char_select_screen = true
+        screen = screens.character_select
+
         -- Reset the timer and score upon starting the game
         timer = 0
         timer_frame_counter = 0
