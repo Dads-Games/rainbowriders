@@ -8,14 +8,17 @@ function CharacterSelect(state)
     function character_select_controller()
         if btnp(0) then
             selected_char = max(1, selected_char - 1)
+            sfx(60) -- character switching sfx
         elseif btnp(1) then
             selected_char = min(#char_names, selected_char + 1)
+            sfx(60) -- character switching sfx
         end
 
         -- Confirm selection and start game
         if btnp(4) then
             player.sprite = selected_char
             state.screen = screens.game
+            sfx(59) -- character selected sfx
             music(26, 0, 0)
         end
     end
