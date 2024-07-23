@@ -1,6 +1,12 @@
 pico-8 cartridge // http://www.pico-8.com
 version 42
 __lua__
+-- DEPENDENCIES
+#include src/utils/colors.lua
+#include src/utils/special_effects.lua
+#include src/utils/rbp_rainbow.lua
+#include src/utils/math.lua
+
 -- Initialize variables
 player = {
     x = 16,
@@ -37,157 +43,6 @@ color_timer = 0
 color_interval = 5
 selected_char = 1
 char_names = {"lizzie", "lily", "riker", "lukas", "maverick", "michael"}
-
-pi = 3.1415926535898
-
--- helpful color map
-BLACK = 0
-DARK_BLUE = 1
-DARK_PURPLE = 2
-DARK_GREEN = 3
-BROWN = 4
-DARK_GRAY = 5
-LIGHT_GRAY = 6
-WHITE = 7
-RED = 8
-ORANGE = 9
-YELLOW = 10
-GREEN = 11
-BLUE = 12
-INDIGO = 13
-PINK = 14
-PEACH = 15
-
--- A collection of special effects that are easy to use
--- This is a factory function that returns an object with special effects
-function SpecialEffect ()
-    local interval = 0
-
-    -- a function that iterates the interval
-    local iterate = function ()
-        interval = interval + 1
-        if interval > 1000 then
-            interval = 0
-        end
-    end
-
-    -- Example Usage:
-    -- local effect = SpecialEffect() -- store this globally
-    -- effect.cycle({RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, DARK_PURPLE}, 10, function (color, index)
-    --     print("color: " .. color .. " index: " .. index)
-    -- end)
-    local cycle = function (list, rate, callback)
-        -- iterate the interval
-        iterate()
-        -- return the item in the list based on the interval
-        local item = list[flr(interval / rate) % #list + 1]
-        -- call the callback with the item and the index
-        callback(item, flr(interval / rate) % #list + 1)
-    end
-
-    -- Example Usage:
-    -- local effect2 = SpecialEffect() -- store this globally
-    -- effect2.blink(10, function (on_off, index)
-    --     if on_off == 0 then
-    --         print("off")
-    --     else
-    --         print("on")
-    --     end
-    -- end)
-    local blink = function (rate, callback)
-        -- iterate the interval
-        iterate()
-        -- return the item in the list based on the interval
-        local on_off = flr(interval / rate) % 2
-        -- call the callback with the item and the index
-        callback(on_off, flr(interval / rate) % 2)
-    end
-
-    return {
-        cycle = cycle,
-        blink = blink
-    }
-end
-
--- @EXPERIMENTAL FEATURE: Jelly's Rainbow Progression (aka rbp_)
--- How it works: As the score increases, players will accumulate rainbow colors.
--- The colors will be displayed as a trail behind the player.
-rbp_enabled = true -- feature toggle
-rbp_colors = {RED, ORANGE, YELLOW, GREEN, BLUE, INDIGO, DARK_PURPLE} -- the colors of the rainbow
-rpb_particle_lifetime = 15
-rpb_particles = {}
-rbp_score_color_step = 5 -- the score increment at which the rainbow band will grow
-rpb_score_threshold = 15 -- the score at which the rainbow band will start to appear
-
--- @EXPERIMENTAL FEATURE: Jelly's Rainbow Progression (aka rbp_)
--- This creates the default rainbow band state
-function rbp_make_rainbow_band (number_of_colors_to_display, x, y, lifetime)
-    return {
-        x = x,
-        y = y,
-        lifetime = lifetime,
-        colors = {unpack(rbp_colors, 1, number_of_colors_to_display)}
-    }
-end
-
--- @EXPERIMENTAL FEATURE: Jelly's Rainbow Progression (aka rbp_)
--- This function renders a rainbow band
--- It will turn off pixels based on the distance from the front of the band so that the band fades out and "sparkles"
-function rbp_render_rainbow_band (band)
-    for i = 1, #band.colors do
-        -- there is a chance this pixel is transparent
-        -- this happens more often the further back in the band we go
-        local distanceCoefficient = 1 - (band.lifetime / rpb_particle_lifetime)
-        if rnd(0.8) < distanceCoefficient then
-            -- since lua doesn't support "continue" we have to use goto (see ::continue:: below)
-            goto continue
-        end
-
-        local x = band.x
-        local y = band.y - i
-        local width = 1
-        local height = 1
-        local color = band.colors[i]
-
-        -- draw as rectangle
-        rectfill(x, y, x + width, y + height, color)
-        ::continue::
-    end
-end
-
--- @EXPERIMENTAL FEATURE: Jelly's Rainbow Progression (aka rbp_)
--- This function is called every frame to update the rainbow band and is responsible for rendering the band
-function rbp_draw_update()
-    -- if not enabled, do nothing
-    if not rbp_enabled then
-        return
-    end
-    
-    -- calculate where the rainbow band should be
-    local top = player.y + 8
-    local bottom = player.y + 8
-    local left = player.x - 2
-
-    -- the player will see no rainbow until they reach the minimum score threshold of rpb_score_threshold
-    -- then every mod of rpb_score_color_step will add a new color to the rainbow band
-    -- until the maximum number of colors is reached based on the length of rbp_colors
-    local number_of_colors_to_display = 0 + flr((score - rpb_score_threshold) / rbp_score_color_step)
-    local test_band = rbp_make_rainbow_band(number_of_colors_to_display, left, top, rpb_particle_lifetime)
-    
-    -- add it to the list of particles
-    add(rpb_particles, test_band)
-
-    -- loop through all patricles
-    for i = #rpb_particles, 1, -1 do
-        local particle = rpb_particles[i]
-        particle.x = particle.x - 1
-        rbp_render_rainbow_band(particle)
-        particle.lifetime = particle.lifetime - 1
-        if particle.lifetime == 0 then
-            del(rpb_particles, particle)
-        end
-    end
-end
 
 -- Timer variables
 timer = 0
@@ -274,8 +129,8 @@ function _update()
 
             -- Update oscillation
             player.oscillation = player.oscillation + 0.1
-            if player.oscillation > 2 * pi then
-                player.oscillation = player.oscillation - 2 * pi
+            if player.oscillation > 2 * MATH.PI then
+                player.oscillation = player.oscillation - 2 * MATH.PI
             end
 
             -- Apply oscillation to player's y-position when on the ground
