@@ -20,7 +20,7 @@ player = {
     height = 6, -- Tighter collision box height
     oscillation = 0 --Variable for oscillation
 }
-debug_mode = true
+debug_mode = false
 obstacles = {}
 spawn_timer = 0
 spawn_interval = 20
@@ -55,6 +55,22 @@ high_score = 0
 function _init()
     cartdata("dads_rr_1")
     high_score = dget(0)
+    menuitem(1, "reset high score",
+    function()
+        score = 0
+        high_score = 0
+        dset(0,0)
+    end
+    )
+    menuitem(2, "debug toggle",
+    function()
+        if debug_mode == true then
+            debug_mode = false
+        else
+            debug_mode = true
+        end
+    end
+    )
 end
 
 function _update()
@@ -218,6 +234,11 @@ function _draw()
         --Draw high score at the bottom right
         print("high score: " .. high_score, 60, 120, 7)
     end
+
+    --this must be last
+    if debug_mode == true then
+        print("D", 1,1,7)
+    end
 end
 
 function draw_game_screen()
@@ -334,6 +355,9 @@ function draw_stretched_sprite(sprite, x, y, dy)
     -- Draw the sprite with the new dimensions
     sspr(sprite % 16 * 8, flr(sprite / 16) * 8, width, height, x, y, new_width, new_height)
 end
+
+
+
 
 __gfx__
 000000000000000000000000000000000000000000000000004f0000000000000000000000000000000000000000000000000000000000000000000000000000
