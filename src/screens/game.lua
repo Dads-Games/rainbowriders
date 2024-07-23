@@ -74,7 +74,7 @@ function Game (state)
             spawn_timer = spawn_timer + 1
             if spawn_timer > spawn_interval + rnd(180) then
                 spawn_timer = 0
-                if not debug_mode then
+                if not state.debug_mode then
                     add(obstacles, {x = 128, y = 104, width = 8, height = flr(rnd(8) + 16), sprite = flr(rnd(12)) + 192})
                 end
             end

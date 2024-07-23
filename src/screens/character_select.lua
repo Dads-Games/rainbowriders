@@ -1,9 +1,11 @@
-function CharacterSelect (state)
+function CharacterSelect(state)
     local player = state.player
     local selected_char = 1
-    local char_names = {"lizzie", "lily", "riker", "lukas", "maverick", "michael"}
+    local char_names = {
+        "lizzie", "lily", "riker", "lukas", "maverick", "michael"
+    }
 
-    function character_select_controller ()
+    function character_select_controller()
         if btnp(0) then
             selected_char = max(1, selected_char - 1)
         elseif btnp(1) then
@@ -18,7 +20,7 @@ function CharacterSelect (state)
         end
     end
 
-    function character_select_view ()
+    function character_select_view()
         print("select your character", 20, 20, 7)
         for i = 1, 6 do
             local x = 5 + (i - 1) * 22
@@ -30,7 +32,7 @@ function CharacterSelect (state)
         end
         print(char_names[selected_char], 50, 65, 7) -- Display character name
         print("press left or right", 20, 90, 7)
-    print("then start to confirm", 30, 100, 7)
+        print("then start to confirm", 30, 100, 7)
     end
 
     return {
