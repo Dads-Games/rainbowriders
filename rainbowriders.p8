@@ -14,111 +14,77 @@ __lua__
 #include src/screens/game_over.lua
 #include src/screens/game.lua
 
-screens = {
-    title = {
-        view = function () title_screen_view() end,
-        controller = function () title_screen_controller() end
-    },
-    character_select = {
-        view = function () character_select_view() end,
-        controller = function () character_select_controller() end
-    },
-    game = {
-        view = function () game_view() end,
-        controller = function () game_controller() end
-    },
-    game_over = {
-        view = function () game_over_view() end,
-        controller = function () game_over_controller() end
-    },
-    high_score = {
-        view = function () high_score_view() end,
-        controller = function () high_score_controller() end
-    },
-    credits = {
-        view = function () credits_view() end,
-        controller = function () credits_controller() end
+-- GAME STATE
+function GameState ()
+    return {
+        screen = nil,
+        debug_mode = false,
+        player = {
+            x = 16,
+            y = 104,
+            dy = 0,
+            jump_strength = -4,
+            gravity = 0.4,
+            on_ground = true,
+            sprite = 1, -- Default sprite index
+            width = 6, -- Tighter collision box width
+            height = 6, -- Tighter collision box height
+            oscillation = 0 --Variable for oscillation
+        },
+        high_score = 0,
+        score = 0,
+
+        toggleDebugMode = function (self)
+            self.debug_mode = not self.debug_mode
+        end
     }
+end
+
+-- INSTANTIATE GAME STATE
+state = GameState()
+
+-- SCREENS
+screens = {
+    title            = TitleScreen(state),
+    character_select = CharacterSelect(state),
+    game             = Game(state),
+    game_over        = GameOver(state),
 }
-
-screen = screens.title
-
--- Initialize variables
-player = {
-    x = 16,
-    y = 104,
-    dy = 0,
-    jump_strength = -4,
-    gravity = 0.4,
-    on_ground = true,
-    sprite = 1, -- Default sprite index
-    width = 6, -- Tighter collision box width
-    height = 6, -- Tighter collision box height
-    oscillation = 0 --Variable for oscillation
-}
-debug_mode = false
-obstacles = {}
-spawn_timer = 0
-spawn_interval = 20
-title_screen = true
-char_select_screen = false
-game_over = false
-game_over_timer = 0
-game_over_delay = 180 -- 1 second (60 frames per second)
-background_x = 0
-background_n = 128 * 8 -- number of tiles wide for the background in the map * 8
-background_y = 96--84
-clouds = {}
-cloud_timer = 0
-cloud_interval = 120
-grass = {}
-
-rainbow_colors = {8, 9, 10, 11, 12, 13, 14}
-color_index = 1
-color_timer = 0
-color_interval = 5
-selected_char = 1
-char_names = {"lizzie", "lily", "riker", "lukas", "maverick", "michael"}
 
 -- Timer variables
 timer = 0
 timer_frame_counter = 0
 
--- Score variable
-score = 0
-high_score = 0
-
 function _init()
+    state.screen = screens.title
+
     cartdata("dads_rr_1")
-    high_score = dget(0)
+    state.high_score = dget(0)
     menuitem(1, "reset high score",
     function()
-        score = 0
-        high_score = 0
+        state.score = 0
+        state.high_score = 0
         dset(0,0)
     end
     )
     menuitem(2, "debug toggle",
     function()
-        if debug_mode == true then
-            debug_mode = false
-        else
-            debug_mode = true
-        end
+        state:toggleDebugMode()
     end
     )
 end
 
 function _update()
-    screen.controller()
+    state.screen.controller()
 end
 
 function _draw()
     cls()
-    screen.view()
+
+    state.screen.view()
 
     --this must be last
-    if debug_mode == true then
+    if state.debug_mode == true then
         print("D", 1,1,7)
     end
 end
