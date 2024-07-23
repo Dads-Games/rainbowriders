@@ -75,7 +75,7 @@ function game_controller ()
                 player.y < obstacle.y + obstacle.height and
                 player.y + 8 > obstacle.y then
                 music(1, 0, 0)
-                screen = screens.game_over
+                game_over = true
                 del(obstacles, obstacle)
             end
         end
