@@ -89,6 +89,22 @@ high_score = 0
 function _init()
     cartdata("dads_rr_1")
     high_score = dget(0)
+    menuitem(1, "reset high score",
+    function()
+        score = 0
+        high_score = 0
+        dset(0,0)
+    end
+    )
+    menuitem(2, "debug toggle",
+    function()
+        if debug_mode == true then
+            debug_mode = false
+        else
+            debug_mode = true
+        end
+    end
+    )
 end
 
 function _update()
@@ -113,6 +129,11 @@ function _draw()
         game_over_view()
     else
         game_view()
+    end
+
+    --this must be last
+    if debug_mode == true then
+        print("D", 1,1,7)
     end
 end
 
