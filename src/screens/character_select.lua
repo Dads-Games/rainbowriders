@@ -8,7 +8,6 @@ function character_select_controller ()
     -- Confirm selection and start game
     if btnp(4) then
         player.sprite = selected_char
-        -- char_select_screen = false
         screen = screens.game
         music(26, 0, 0)
     end
