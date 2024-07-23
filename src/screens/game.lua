@@ -43,7 +43,7 @@ function Game (state)
             
             -- Player jump
             if btnp(4) and player.on_ground then
-                sfx(62)
+                sfx(4)
                 player.dy = player.jump_strength
                 player.on_ground = false
             end
@@ -75,11 +75,7 @@ function Game (state)
             if spawn_timer > spawn_interval + rnd(180) then
                 spawn_timer = 0
                 if not state.debug_mode then
-                    sprite_obstacle = flr(rnd(12)) + 192
-                    if sprite_obstacle == 192 then
-                        sfx(61) -- play poop sfx for poop spawn
-                    end
-                    add(obstacles, {x = 128, y = 104, width = 8, height = flr(rnd(8) + 16), sprite = sprite_obstacle})
+                    add(obstacles, {x = 128, y = 104, width = 8, height = flr(rnd(8) + 16), sprite = flr(rnd(12)) + 192})
                 end
             end
 
@@ -98,7 +94,7 @@ function Game (state)
                     player.x + 8 > obstacle.x and
                     player.y < obstacle.y + obstacle.height and
                     player.y + 8 > obstacle.y then
-                    music(-1) -- game over track
+                    music(1, 0, 0)
                     state.screen = screens.game_over
                     del(obstacles, obstacle)
                 end
@@ -134,8 +130,12 @@ function Game (state)
     end
 
     function game_view ()
+        -- color palette hack for a brighter blue background
+        pal({[0]=0,140,2,3,4,5,6,7,8,9,10,11,12,13,14,15},1)
+        
         -- Draw sky
         rectfill(0, 0, 127, 127, 1)
+        --pal()
         -- Draw map as background
         map(0, 0, background_x, background_y, background_n/8, 16)
         map(0, 0, background_x - background_n, background_y, background_n/8, 16)
