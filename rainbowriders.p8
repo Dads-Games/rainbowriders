@@ -33,6 +33,10 @@ function GameState ()
         },
         high_score = 0,
         score = 0,
+
+        toggleDebugMode = function (self)
+            self.debug_mode = not self.debug_mode
+        end
     }
 end
 
@@ -65,7 +69,7 @@ function _init()
     )
     menuitem(2, "debug toggle",
     function()
-        state.debug_mode = not state.debug_mode
+        state:toggleDebugMode()
     end
     )
 end
