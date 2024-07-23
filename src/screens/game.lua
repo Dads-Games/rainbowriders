@@ -130,8 +130,12 @@ function Game (state)
     end
 
     function game_view ()
+        -- color palette hack for a brighter blue background
+        pal({[0]=0,140,2,3,4,5,6,7,8,9,10,11,12,13,14,15},1)
+        
         -- Draw sky
         rectfill(0, 0, 127, 127, 1)
+        --pal()
         -- Draw map as background
         map(0, 0, background_x, background_y, background_n/8, 16)
         map(0, 0, background_x - background_n, background_y, background_n/8, 16)
