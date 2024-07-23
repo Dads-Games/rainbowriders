@@ -43,7 +43,7 @@ function Game (state)
             
             -- Player jump
             if btnp(4) and player.on_ground then
-                sfx(4)
+                sfx(62)
                 player.dy = player.jump_strength
                 player.on_ground = false
             end
@@ -75,7 +75,11 @@ function Game (state)
             if spawn_timer > spawn_interval + rnd(180) then
                 spawn_timer = 0
                 if not state.debug_mode then
-                    add(obstacles, {x = 128, y = 104, width = 8, height = flr(rnd(8) + 16), sprite = flr(rnd(12)) + 192})
+                    sprite_obstacle = flr(rnd(12)) + 192
+                    if sprite_obstacle == 192 then
+                        sfx(61) -- play poop sfx for poop spawn
+                    end
+                    add(obstacles, {x = 128, y = 104, width = 8, height = flr(rnd(8) + 16), sprite = sprite_obstacle})
                 end
             end
 
@@ -94,7 +98,7 @@ function Game (state)
                     player.x + 8 > obstacle.x and
                     player.y < obstacle.y + obstacle.height and
                     player.y + 8 > obstacle.y then
-                    music(1, 0, 0)
+                    music(-1) -- game over track
                     state.screen = screens.game_over
                     del(obstacles, obstacle)
                 end
