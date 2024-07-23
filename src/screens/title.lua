@@ -22,7 +22,7 @@ function TitleScreen (state)
             -- Reset the timer and score upon starting the game
             timer = 0
             timer_frame_counter = 0
-            score = 0
+            state.score = 0
         end
     end
 
