@@ -41,6 +41,8 @@ screens = {
     }
 }
 
+screen = screens.title
+
 -- Initialize variables
 player = {
     x = 16,
@@ -108,28 +110,12 @@ function _init()
 end
 
 function _update()
-    if title_screen then
-        title_screen_controller()
-    elseif char_select_screen then
-        character_select_controller()
-    elseif game_over then
-        game_over_controller()
-    else
-        game_controller()
-    end
+    screen.controller()
 end
 
 function _draw()
     cls()
-    if title_screen then
-        title_screen_view()
-    elseif char_select_screen then
-        character_select_view()
-    elseif game_over then
-        game_over_view()
-    else
-        game_view()
-    end
+    screen.view()
 
     --this must be last
     if debug_mode == true then

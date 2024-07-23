@@ -2,8 +2,7 @@ function game_over_controller ()
     -- Increment game over timer
     game_over_timer = game_over_timer + 1
     if game_over_timer > game_over_delay then
-        title_screen = true
-        game_over = false
+        screen = screens.title
     end
 end
 
