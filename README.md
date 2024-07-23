@@ -5,3 +5,6 @@ Games made by Dads
 
 ## Rainbow Riders
 ![rainbowriders](https://github.com/jonrick/dadsgames/blob/main/rainbowriders.gif)
+
+Play the latest build!
+![https://dads-games.github.io/pico-8/rainbowriders.html](https://dads-games.github.io/pico-8/rainbowriders.html)
