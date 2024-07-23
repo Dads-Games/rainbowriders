@@ -47,7 +47,7 @@ end
 
 -- @EXPERIMENTAL FEATURE: Jelly's Rainbow Progression (aka rbp_)
 -- This function is called every frame to update the rainbow band and is responsible for rendering the band
-function rbp_draw_update()
+function rbp_draw_update(player, score)
     -- if not enabled, do nothing
     if not rbp_enabled then
         return
