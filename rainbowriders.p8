@@ -65,11 +65,7 @@ function _init()
     )
     menuitem(2, "debug toggle",
     function()
-        if state.debug_mode == true then
-            state.debug_mode = false
-        else
-            state.debug_mode = true
-        end
+        state.debug_mode = not state.debug_mode
     end
     )
 end
@@ -84,7 +80,7 @@ function _draw()
     state.screen.view()
 
     --this must be last
-    if debug_mode == true then
+    if state.debug_mode == true then
         print("D", 1,1,7)
     end
 end
