@@ -12,7 +12,10 @@ __lua__
 #include src/screens/title.lua
 #include src/screens/character_select.lua
 #include src/screens/game_over.lua
+
+-- SCREEN: GAME
 #include src/screens/game.lua
+#include src/screens/game/cloud_system.lua
 
 -- GAME STATE
 function GameState ()
