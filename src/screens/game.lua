@@ -14,8 +14,9 @@ function Game (state)
     local background_x = 0
     local background_n = 128 * 8 -- number of tiles wide for the background in the map * 8
     local background_y = 96--84
-
-    local clouds = CloudSystem()
+    local clouds = {}
+    local cloud_timer = 0
+    local cloud_interval = 120
 
     function draw_stretched_sprite(sprite, x, y, dy)
         local stretch_factor = 1 + abs(dy) * 0.1
@@ -32,8 +33,6 @@ function Game (state)
 
     function game_controller ()
         if not game_over then
-            clouds.update()
-
             -- Timer update
             timer_frame_counter = timer_frame_counter + 1
             if timer_frame_counter >= 30 then -- Assuming _update is called 30 times per second
@@ -108,6 +107,19 @@ function Game (state)
             -- Update background
             background_x = (background_x - 1) % background_n
 
+            -- Update clouds
+            cloud_timer = cloud_timer + 1
+            if cloud_timer > cloud_interval then
+                cloud_timer = 0
+                add(clouds, {x = 128, y = flr(rnd(40)), sprite = flr(rnd(3)) + 66})
+            end
+            for cloud in all(clouds) do
+                cloud.x = cloud.x - rnd(0.25)
+                if cloud.x < -32 then
+                    del(clouds, cloud)
+                end
+            end
+
             -- Update grass
             if (background_x % 16) == 0 then
                 add(grass, {x = 128, y = 110 + rnd(15) , sprite = flr(rnd(3)) + 69})
@@ -153,8 +165,9 @@ function Game (state)
         spr(96, 10, 10)
 
         -- Draw clouds
-        clouds.draw()
-
+        for cloud in all(clouds) do
+            spr(cloud.sprite, cloud.x, cloud.y)
+        end
         -- Draw background
         rectfill(background_x, 112, background_x + background_n, 128, 3)
         rectfill(background_x - background_n, 112, background_x, 128, 3)
@@ -187,5 +200,5 @@ function Game (state)
     return {
         view = game_view,
         controller = game_controller
-    }   
+    }
 end
