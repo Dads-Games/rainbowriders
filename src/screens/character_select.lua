@@ -16,7 +16,7 @@ function CharacterSelect(state)
 
         -- Confirm selection and start game
         if btnp(4) then
-            player.sprite = selected_char
+            player.sprite = 13 --selected_char
             state.screen = screens.game
             sfx(59) -- character selected sfx
             music(26, 0, 0)
