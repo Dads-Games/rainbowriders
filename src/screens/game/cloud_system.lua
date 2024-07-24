@@ -3,7 +3,7 @@ function CloudSystem ()
     local cloudSystem = {}
 
     -- config
-    local max_clouds_on_screen = 3
+    local max_clouds_on_screen = 6
     local cloud_speed = { min = 0.025, max = 0.1 }
     local zone = {
         top = 0,
