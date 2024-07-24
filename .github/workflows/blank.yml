@@ -39,9 +39,20 @@ jobs:
       run: |
         $PICO8_PATH -x rainbowriders -export rainbowriders.html
 
+    - name: Determine Deploy Directory
+      id: deploy-dir
+      run: |
+        if [ "${{ github.event_name }}" == "pull_request" ]; then
+          DEPLOY_DIR="pr-${{ github.event.pull_request.number }}"
+        else
+          DEPLOY_DIR="main"
+        fi
+        echo "DEPLOY_DIR=$DEPLOY_DIR" >> $GITHUB_ENV
+
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./
         publish_branch: gh-pages
+        publish_dir: ./
+        destination_dir: ${{ env.DEPLOY_DIR }}
