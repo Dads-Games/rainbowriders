@@ -1,7 +1,7 @@
 function GameOver (state)
     local game_over_timer = 0
     local game_over_timer = 0
-    local game_over_delay = 180 -- 1 second (60 frames per second)
+    local game_over_delay = 60 -- 1 second (60 frames per second)
 
     function game_over_controller ()
         -- Increment game over timer
