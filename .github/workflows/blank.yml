@@ -4,6 +4,7 @@ name: Build and Deploy
 
 permissions:
   contents: write  # Ensure we have write permissions to the repository content
+  pull-requests: write  # Ensure we have write permissions to the pull requests
 
 on:
   push:
@@ -55,3 +56,21 @@ jobs:
         publish_branch: gh-pages
         publish_dir: ./
         destination_dir: ${{ env.DEPLOY_DIR }}
+
+    - name: Comment on Pull Request
+      if: ${{ github.event_name == 'pull_request' }}
+      uses: actions/github-script@v5
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const prNumber = ${{
+            github.event.pull_request && github.event.pull_request.number ? github.event.pull_request.number : github.event.issue.number
+           }};
+          const url = `https://${{ github.repository }}/main/pr-${prNumber}/rainbowriders.html`;
+          const body = `🎮 Your game has been deployed! You can play it [here](${url}).`;
+          github.rest.issues.createComment({
+            issue_number: prNumber,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: body
+          });
