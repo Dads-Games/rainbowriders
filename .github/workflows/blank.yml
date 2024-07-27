@@ -65,7 +65,7 @@ jobs:
         script: |
           const prNumber = ${{ github.event.pull_request.number }};
           const url = `https://dads-games.github.io/pico-8/pr-${prNumber}/rainbowriders.html`;
-          const body = 🌈 Ride forth Rainbow Rider and test your build here -> [here](${url}).`;
+          const body = `🌈 Ride forth Rainbow Rider and test your build [here](${url}).`;
           github.rest.issues.createComment({
             issue_number: prNumber,
             owner: context.repo.owner,
