@@ -14,14 +14,8 @@ function Game (state)
     local background_x = 0
     local background_n = 128 * 8 -- number of tiles wide for the background in the map * 8
     local background_y = 96--84
-    local grace_period = 30 * 3 -- 3 seconds
-    local grace_period_counter = 0
 
     local clouds = CloudSystem()
-
-    function is_grace_period ()
-        return grace_period_counter < grace_period
-    end
 
     function draw_stretched_sprite(sprite, x, y, dy)
         local stretch_factor = 1 + abs(dy) * 0.1
@@ -37,14 +31,8 @@ function Game (state)
     end
 
     function game_controller ()
-
         if not game_over then
             clouds.update()
-
-            -- Increment grace period counter
-            if is_grace_period() then
-                grace_period_counter = grace_period_counter + 1
-            end
 
             -- Timer update
             timer_frame_counter = timer_frame_counter + 1
@@ -85,7 +73,7 @@ function Game (state)
 
             -- Spawn obstacles
             spawn_timer = spawn_timer + 1
-            if not is_grace_period() and spawn_timer > spawn_interval + rnd(180) then
+            if spawn_timer > spawn_interval + rnd(180) then
                 spawn_timer = 0
                 if not state.debug_mode then
                     sprite_obstacle = flr(rnd(12)) + 192
