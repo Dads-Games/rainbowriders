@@ -57,22 +57,15 @@ jobs:
         publish_dir: ./
         destination_dir: ${{ env.DEPLOY_DIR }}
 
-    - name: Set Repository Variables
-      run: |
-        echo "REPOSITORY_OWNER=${{ github.repository_owner }}" >> $GITHUB_ENV
-        echo "REPOSITORY_NAME=${{ github.repository }}" >> $GITHUB_ENV
-
     - name: Comment on Pull Request
       if: ${{ github.event_name == 'pull_request' }}
       uses: actions/github-script@v5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
-          const prNumber = ${{
-            github.event.pull_request.number
-           }};
-          const url = `https://${{ env.REPOSITORY_OWNER }}.github.io/${{ env.REPOSITORY_NAME }}/pr-${prNumber}/rainbowriders.html`;
-          const body = `🎮 Your game has been deployed! You can play it [here](${url}).`;
+          const prNumber = ${{ github.event.pull_request.number }};
+          const url = `https://dads-games.github.io/pico-8/pr-${prNumber}/rainbowriders.html`;
+          const body = 🌈 Ride forth Rainbow Rider and test your build here -> [here](${url}).`;
           github.rest.issues.createComment({
             issue_number: prNumber,
             owner: context.repo.owner,
