@@ -12,6 +12,7 @@ __lua__
 #include src/screens/title.lua
 #include src/screens/character_select.lua
 #include src/screens/game_over.lua
+#include src/screens/credits.lua
 
 -- SCREEN: GAME
 #include src/screens/game.lua
@@ -52,6 +53,7 @@ screens = {
     character_select = CharacterSelect(state),
     game             = Game(state),
     game_over        = GameOver(state),
+    credits          = Credits(state),
 }
 
 -- Timer variables
@@ -78,8 +80,23 @@ function _init()
 end
 
 function _update()
-    state.screen.controller()
+    if state.screen and state.screen.controller then
+        state.screen.controller()
+    end
 end
+
+function _draw()
+    cls()
+    if state.screen and state.screen.view then
+        state.screen.view()
+    end
+
+    -- this must be last
+    if state.debug_mode == true then
+        print("D", 1, 1, 7)
+    end
+end
+
 
 function _draw()
     cls()
