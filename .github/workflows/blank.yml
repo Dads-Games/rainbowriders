@@ -67,7 +67,7 @@ jobs:
             github.event.pull_request.number
            }};
           const url = `https://${{ github.repository.owner }}.github.io/${{ github.repository.name }}/pr-${prNumber}/rainbowriders.html`;
-          const body = `🎮 Your game has been deployed! You can play it [here](${url}).`;
+          const body = `🎮 Ride forth Rainbow Rider, and test your build at -> [here](${url}).`;
           github.rest.issues.createComment({
             issue_number: prNumber,
             owner: context.repo.owner,
