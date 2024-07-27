@@ -64,9 +64,9 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           const prNumber = ${{
-            github.event.pull_request && github.event.pull_request.number ? github.event.pull_request.number : github.event.issue.number
+            github.event.pull_request.number
            }};
-          const url = `https://${{ github.repository }}/main/pr-${prNumber}/rainbowriders.html`;
+          const url = `https://${{ github.repository.owner }}.github.io/${{ github.repository.name }}/pr-${prNumber}/rainbowriders.html`;
           const body = `🎮 Your game has been deployed! You can play it [here](${url}).`;
           github.rest.issues.createComment({
             issue_number: prNumber,
