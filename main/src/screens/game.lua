@@ -13,7 +13,7 @@ function Game(state)
     local game_over = false
     local background_x = 0
     local background_n = 128 * 8 -- number of tiles wide for the background in the map * 8
-    local background_y = 96 -- 84
+    local background_y = 96 - 16-- 84
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
 
@@ -136,7 +136,7 @@ function Game(state)
 
         -- Update grass
         if (background_x % 16) == 0 then
-            add(grass, {x = 128, y = 110 + rnd(15), sprite = flr(rnd(3)) + 69})
+            add(grass, {x = 128, y = 110 + rnd(15), sprite = flr(rnd(3)) + 82})
         end
         for blade in all(grass) do
             blade.x = blade.x - 2
@@ -154,8 +154,8 @@ function Game(state)
         -- pal()
 
         -- Draw map as background
-        map(0, 0, background_x, background_y, background_n / 8, 16)
-        map(0, 0, background_x - background_n, background_y, background_n / 8, 16)
+        map(0, 0, background_x, background_y, background_n / 8, 32)
+        map(0, 0, background_x - background_n, background_y, background_n / 8, 32)
 
         -- Draw sun
         spr(96, 10, 10)
