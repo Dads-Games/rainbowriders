@@ -16,7 +16,6 @@ function Game(state)
     local background_y = 96 - 16 - 12-- 84
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
-
     local clouds = CloudSystem()
 
     function is_grace_period() return grace_period_counter < grace_period end
@@ -149,19 +148,27 @@ function Game(state)
     end
 
     function game_view()
-        -- color palette hack for a brighter blue background
-        pal({[0] = 0, 140, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, 1)
-
         -- Draw sky
         rectfill(0, 0, 127, 127, 1)
-        -- pal()
+
+        if state.daytime == false then
+            -- Draw moon & stars
+            spr(99, 2, 10)
+            spr(98, 10, 10)
+            spr(100, 18, 10)
+            pal()
+        else
+            -- Draw sun
+            spr(96, 10, 10)
+            -- color palette hack for a brighter blue background
+            pal({[0] = 0, 140, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, 1)
+        end
 
         -- Draw map as background
         map(0, 0, background_x, background_y, background_n / 8, 32)
         map(0, 0, background_x - background_n, background_y, background_n / 8, 32)
 
-        -- Draw sun
-        spr(96, 10, 10)
+
 
         -- Draw clouds
         clouds.draw()
