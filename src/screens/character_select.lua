@@ -40,7 +40,7 @@ function CharacterSelect(state)
         end
         printc(RIDERS[selected_rider_index].name, 50, 65, 7) -- Display character name
         printc("press left or right", 20, 90, 7)
-        printc("then start to confirm", 30, 100, 7)
+        printc("then any button to confirm", 30, 100, 7)
 
     end
 
