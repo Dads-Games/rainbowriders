@@ -15,7 +15,7 @@ function CharacterSelect(state)
         end
 
         -- Confirm selection and start game
-        if btnp(4) then
+        if btnp(4) or btnp (5)then
             player.sprite = selected_char
             state.screen = GetReady(state)
             sfx(59) -- character selected sfx
@@ -23,7 +23,7 @@ function CharacterSelect(state)
     end
 
     function character_select_view()
-        print("select your character", 20, 20, 7)
+        printc("select your character", 20, 20, 7)
         for i = 1, 6 do
             local x = 5 + (i - 1) * 22
             local y = 40
@@ -32,9 +32,9 @@ function CharacterSelect(state)
             end
             spr(i, x, y)
         end
-        print(char_names[selected_char], 50, 65, 7) -- Display character name
-        print("press left or right", 20, 90, 7)
-        print("then start to confirm", 30, 100, 7)
+        printc(char_names[selected_char], 50, 65, 7) -- Display character name
+        printc("press left or right", 20, 90, 7)
+        printc("then any button to confirm", 30, 100, 7)
     end
 
     return {

@@ -66,7 +66,7 @@ function Game(state)
         end
 
         -- Player jump
-        if btnp(4) and player.on_ground then
+        if btnp(4) and player.on_ground or btnp(5) and player.on_ground then
             sfx(62)
             player.dy = player.jump_strength
             player.on_ground = false

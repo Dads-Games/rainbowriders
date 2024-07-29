@@ -16,7 +16,7 @@ function TitleScreen (state)
         end
         game_over_timer = 0
         -- Move to character select screen
-        if btnp(4) then
+        if btnp(4) or btnp (5) then
             state.screen = screens.character_select
     
             -- Reset the timer and score upon starting the game
@@ -34,14 +34,14 @@ function TitleScreen (state)
             local y = 40
             spr(i, x, y)
         end
-
-        print("rainbow riders", 33, 53, color)
+        
+        printc("rainbow riders", 0, 53, color)
         press_start_blinker(15, function (on_off, index)
             if on_off == 0 then
-                print("press start", 39, 86, 7)
+                printc("press any button to start", x, 86, 7)
             end
         end)
-        print("(c) copyright 1977 - dads' games", 0, 120, 1)
+        printc("(c) 1977 dads' games", 0, 120, 1)
 
         -- Check and set high score
         if state.score > state.high_score then
