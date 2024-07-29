@@ -13,7 +13,7 @@ function Game(state)
     local game_over = false
     local background_x = 0
     local background_n = 128 * 8 -- number of tiles wide for the background in the map * 8
-    local background_y = 96 - 16-- 84
+    local background_y = 96 - 16 - 12-- 84
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
 
@@ -136,7 +136,10 @@ function Game(state)
 
         -- Update grass
         if (background_x % 16) == 0 then
-            add(grass, {x = 128, y = 110 + rnd(15), sprite = flr(rnd(3)) + 82})
+            add(grass, {x = 128, y = 114 + rnd(8), sprite = flr(rnd(3)) + 82})
+        end
+        if (background_x % 24) == 0 then
+            --add(grass, {x = 128, y = 93 + rnd(4), sprite = flr(rnd(3)) + 82})
         end
         for blade in all(grass) do
             blade.x = blade.x - 2
@@ -163,8 +166,17 @@ function Game(state)
         -- Draw clouds
         clouds.draw()
 
-        -- Grassy Floor
-        rectfill(0, 112, 128, 128, 3)
+        -- Draw top grass
+        rectfill(0, 112-12, 128, 128, 3)
+        -- Draw street
+        rectfill(0, 112-8, 128, 128, 0)
+        -- Draw top curb
+        rectfill(0, 112-8, 128, 112-8, 5)
+        -- Draw bottom grass
+        rectfill(0, 112+8, 128, 128, 3)
+         -- Draw bottom curb
+        rectfill(0, 112+8, 128, 112+8, 5)
+
 
         -- Draw grass
         for blade in all(grass) do spr(blade.sprite, blade.x, blade.y) end
@@ -184,10 +196,10 @@ function Game(state)
         print(timer, 115, 5, 7)
 
         -- Draw the score at the bottom left
-        print("score: " .. state.score, 5, 120, 7)
+        print("score: " .. state.score, 5, 122, 7)
 
         -- Draw high score at the bottom right
-        print("high score: " .. state.high_score, 60, 120, 7)
+        print("high score: " .. state.high_score, 60, 122, 7)
     end
 
     return {view = game_view, controller = game_controller}
