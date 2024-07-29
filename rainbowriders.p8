@@ -8,6 +8,7 @@ __lua__
 #include src/utils/rbp_rainbow.lua
 #include src/utils/math.lua
 #include src/utils/sequencer.lua
+#include src/utils/printc.lua
 
 -- SCREENS
 #include src/screens/title.lua
