@@ -7,11 +7,13 @@ __lua__
 #include src/utils/special_effects.lua
 #include src/utils/rbp_rainbow.lua
 #include src/utils/math.lua
+#include src/utils/sequencer.lua
 
 -- SCREENS
 #include src/screens/title.lua
 #include src/screens/character_select.lua
 #include src/screens/game_over.lua
+#include src/screens/get_ready.lua
 
 -- SCREEN: GAME
 #include src/screens/game.lua
@@ -50,6 +52,7 @@ state = GameState()
 screens = {
     title            = TitleScreen(state),
     character_select = CharacterSelect(state),
+    get_ready        = GetReady(state),
     game             = Game(state),
     game_over        = GameOver(state),
 }
@@ -60,6 +63,7 @@ timer_frame_counter = 0
 
 function _init()
     state.screen = screens.title
+    -- state.screen = screens.get_ready
 
     cartdata("dads_rr_1")
     state.high_score = dget(0)
