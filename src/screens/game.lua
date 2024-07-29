@@ -66,7 +66,7 @@ function Game(state)
         end
 
         -- Player jump
-        if btnp(4) and player.on_ground then
+        if btnp(4) and player.on_ground or btnp(5) and player.on_ground then
             sfx(62)
             player.dy = player.jump_strength
             player.on_ground = false
@@ -182,7 +182,8 @@ function Game(state)
         for blade in all(grass) do spr(blade.sprite, blade.x, blade.y) end
 
         -- Draw player
-        draw_stretched_sprite(player.sprite, player.x, player.y, player.dy)
+        local rider_sprite = RIDERS[player.rider].sprite
+        draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
 
         -- EXPERIMENTAL FEATURE: Jelly's Rainbow Progression
         rbp_draw_update(player, state.score)
