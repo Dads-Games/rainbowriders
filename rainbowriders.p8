@@ -20,6 +20,34 @@ __lua__
 #include src/screens/game.lua
 #include src/screens/game/cloud_system.lua
 
+-- GLOBAL CONSTANTS
+RIDERS = {
+    {
+        name = "lizzie",
+        sprite = 1
+    },
+    {
+        name =  "lily",
+        sprite = 2
+    },
+    {
+        name =  "riker",
+        sprite = 3
+    },
+    {
+        name =  "lukas",
+        sprite = 4
+    },
+    {
+        name =  "maverick",
+        sprite = 5
+    },
+    {
+        name = "michael",
+        sprite = 6
+    }
+}
+
 -- GAME STATE
 function GameState ()
     return {
@@ -32,7 +60,7 @@ function GameState ()
             jump_strength = -4,
             gravity = 0.4,
             on_ground = true,
-            sprite = 1, -- Default sprite index
+            rider = 1,
             width = 6, -- Tighter collision box width
             height = 6, -- Tighter collision box height
             oscillation = 0 --Variable for oscillation
@@ -64,7 +92,6 @@ timer_frame_counter = 0
 
 function _init()
     state.screen = screens.title
-    -- state.screen = screens.get_ready
 
     cartdata("dads_rr_1")
     state.high_score = dget(0)
