@@ -134,7 +134,7 @@ function GetReady(state)
         spr(rider.sprite, 128 / 2 - 32, 128 / 2 - 1 + rider_bounce)
 
         -- draw the name next to the scootie
-        print(rider.name, 128 / 2 + 5 - #rider.name * 4, 128 / 2 + 3, 7)
+        print(rider.name, 128 / 2 - 8, 128 / 2 + 3, 7)
 
         -- GET READY blinking
         animation()
