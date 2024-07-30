@@ -20,6 +20,16 @@ function TitleScreen (state)
     local waiting_timer = 0
     local wait_for = 1 * 30
 
+    -- this is to prevent the game from going through the konami code flow
+    -- if we return to the title screen from anywhere else
+    -- is it a hack? yes. does it work? yes.
+    -- is it the best way to do this? probably not.
+    -- but it's a game jam so ¯\_(ツ)_/¯
+    -- so we're doing it this way.
+    -- if you have a better way, you should do it that way.
+    -- idgaf. - tired dad
+    local should_skip_regular_controls = true
+
     function go_to_character_select ()
         state.screen = screens.character_select
     
@@ -79,7 +89,7 @@ function TitleScreen (state)
         end
 
         -- if the konami code was entered, wait for a few seconds before going to the character select screen
-        if konami_code_on then
+        if konami_code_on and should_skip_regular_controls then
             if not waiting then
                 sfx(58)
             end
@@ -89,6 +99,7 @@ function TitleScreen (state)
 
             if waiting_timer > wait_for then
                 -- set into game state
+                should_skip_regular_controls = false
                 state.konami = true
                 go_to_character_select()
             else
