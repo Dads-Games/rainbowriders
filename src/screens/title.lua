@@ -4,8 +4,34 @@ function TitleScreen (state)
     local color_index = 1
     local rainbow_colors = {8, 9, 10, 11, 12, 13, 14}
 
+    local KEYS = {
+        UP = 0,
+        DOWN = 1,
+        LEFT = 2,
+        RIGHT = 3,
+        A = 4,
+        B = 5
+    }
+
+    local konami_code = { KEYS.UP, KEYS.UP, KEYS.DOWN, KEYS.DOWN, KEYS.LEFT, KEYS.RIGHT, KEYS.LEFT, KEYS.RIGHT, KEYS.B, KEYS.A }
+    local last_keys_pressed = {}
+    local konami_code_on = false
+    local waiting = false
+    local waiting_timer = 0
+    local wait_for = 1 * 30
+
+    function go_to_character_select ()
+        state.screen = screens.character_select
+    
+        -- Reset the timer and score upon starting the game
+        timer = 0
+        timer_frame_counter = 0
+        state.score = 0
+    end
+
     function title_screen_controller ()
-        -- Cycle through colors
+
+        -- cycle through colors
         color_timer = color_timer + 1
         if color_timer > color_interval then
             color_timer = 0
@@ -14,15 +40,66 @@ function TitleScreen (state)
                 color_index = 1
             end
         end
+
+        -- track the last keys pressed for the konami code
+        local last_key_pressed = nil
+        if btnp(0) then
+            last_key_pressed = KEYS.LEFT
+        elseif btnp(1) then
+            last_key_pressed = KEYS.RIGHT
+        elseif btnp(2) then
+            last_key_pressed = KEYS.UP
+        elseif btnp(3) then
+            last_key_pressed = KEYS.DOWN
+        elseif btnp(4) then
+            last_key_pressed = KEYS.A
+        elseif btnp(5) then
+            last_key_pressed = KEYS.B
+        end
+
+        -- store the last 10 keys pressed
+        if last_key_pressed then
+            add(last_keys_pressed, last_key_pressed)
+            -- only keep the last 10
+            if #last_keys_pressed > 10 then
+                deli(last_keys_pressed, 1)
+            end
+        end
+
+        -- check if the konami code was entered
+        if not konami_code_on and #last_keys_pressed >= #konami_code then
+            local konami_code_entered = true
+            for i = 1, #konami_code do
+                if last_keys_pressed[#last_keys_pressed - #konami_code + i] ~= konami_code[i] then
+                    konami_code_entered = false
+                    break
+                end
+            end
+            konami_code_on = konami_code_entered
+        end
+
+        -- if the konami code was entered, wait for a few seconds before going to the character select screen
+        if konami_code_on then
+            if not waiting then
+                sfx(58)
+            end
+
+            waiting = true
+            waiting_timer = waiting_timer + 1
+
+            if waiting_timer > wait_for then
+                -- set into game state
+                state.konami = true
+                go_to_character_select()
+            else
+                return
+            end
+        end
+
         game_over_timer = 0
         -- Move to character select screen
-        if btnp(4) or btnp (5) then
-            state.screen = screens.character_select
-    
-            -- Reset the timer and score upon starting the game
-            timer = 0
-            timer_frame_counter = 0
-            state.score = 0
+        if last_key_pressed == KEYS.A then
+            go_to_character_select()
         end
     end
 
