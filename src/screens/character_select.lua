@@ -27,7 +27,11 @@ function CharacterSelect(state)
     function character_select_view()
 
         local selected_rider_index = state.player.rider
-
+        if state.konami == true then
+            RIDERS = PRIDERS
+        elseif state.konami == false then
+            RIDERS = KRIDERS
+        end
         printc("select your character", 20, 20, 7)
         for i = 1, #RIDERS do
 

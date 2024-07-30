@@ -21,7 +21,8 @@ __lua__
 #include src/screens/game/cloud_system.lua
 
 -- GLOBAL CONSTANTS
-RIDERS = {
+
+KRIDERS = {
     {
         name = "lizzie",
         sprite = 1
@@ -48,11 +49,39 @@ RIDERS = {
     }
 }
 
+PRIDERS = {
+    {
+        name = "francis",
+        sprite = 8
+    },
+    {
+        name =  "sara",
+        sprite = 9
+    },
+    {
+        name =  "tiffany",
+        sprite = 10
+    },
+    {
+        name =  "jon",
+        sprite = 11
+    },
+    {
+        name =  "amanda",
+        sprite = 12
+    },
+    {
+        name = "alien",
+        sprite = 13
+    }
+}
 -- GAME STATE
 function GameState ()
     return {
         screen = nil,
         debug_mode = false,
+        daytime = true,
+        konami = false,
         player = {
             x = 16,
             y = 104,
@@ -70,6 +99,14 @@ function GameState ()
 
         toggleDebugMode = function (self)
             self.debug_mode = not self.debug_mode
+        end,
+        
+        toggleDaynight = function (self)
+            self.daytime = not self.daytime
+        end,
+
+        toggleKonami = function (self)
+            self.konami = not self.konami
         end
     }
 end
@@ -105,6 +142,16 @@ function _init()
     menuitem(2, "debug toggle",
     function()
         state:toggleDebugMode()
+    end
+    )
+    menuitem(3, "daynight toggle",
+    function()
+        state:toggleDaynight()
+    end
+    )
+    menuitem(4, "konmai toggle",
+    function()
+        state:toggleKonami()
     end
     )
 end
