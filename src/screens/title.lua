@@ -9,11 +9,12 @@ function TitleScreen (state)
         DOWN = 1,
         LEFT = 2,
         RIGHT = 3,
-        A = 4,
-        B = 5
+        B = 4,
+        A = 5,
+        START = 6
     }
 
-    local konami_code = { KEYS.UP, KEYS.UP, KEYS.DOWN, KEYS.DOWN, KEYS.LEFT, KEYS.RIGHT, KEYS.LEFT, KEYS.RIGHT, KEYS.B, KEYS.A }
+    local konami_code = { KEYS.UP, KEYS.UP, KEYS.DOWN, KEYS.DOWN, KEYS.LEFT, KEYS.RIGHT, KEYS.LEFT, KEYS.RIGHT, KEYS.B, KEYS.A, KEYS.START}
     local last_keys_pressed = {}
     local konami_code_on = false
     local waiting = false
@@ -53,6 +54,9 @@ function TitleScreen (state)
 
         -- track the last keys pressed for the konami code
         local last_key_pressed = nil
+        if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
+        if (keypress == 'p') poke(0x5f30,1) --suppress 'p' for pause
+
         if btnp(0) then
             last_key_pressed = KEYS.LEFT
         elseif btnp(1) then
@@ -62,16 +66,19 @@ function TitleScreen (state)
         elseif btnp(3) then
             last_key_pressed = KEYS.DOWN
         elseif btnp(4) then
-            last_key_pressed = KEYS.A
-        elseif btnp(5) then
             last_key_pressed = KEYS.B
+        elseif btnp(5) then
+            last_key_pressed = KEYS.A
+        elseif btnp(6) then
+            last_key_pressed = KEYS.START
+            --go_to_character_select()
         end
 
-        -- store the last 10 keys pressed
+        -- store the last 11 keys pressed
         if last_key_pressed then
             add(last_keys_pressed, last_key_pressed)
-            -- only keep the last 10
-            if #last_keys_pressed > 10 then
+            -- only keep the last 11
+            if #last_keys_pressed > 11 then
                 deli(last_keys_pressed, 1)
             end
         end
@@ -109,7 +116,7 @@ function TitleScreen (state)
 
         game_over_timer = 0
         -- Move to character select screen
-        if last_key_pressed == KEYS.A then
+        if last_key_pressed == KEYS.START then
             go_to_character_select()
         end
     end
@@ -126,7 +133,7 @@ function TitleScreen (state)
         printc("rainbow riders", 0, 53, color)
         press_start_blinker(15, function (on_off, index)
             if on_off == 0 then
-                printc("press any button to start", x, 86, 7)
+                printc("press start to play", x, 86, 7)
             end
         end)
         printc("(c) 1977 dads' games", 0, 120, 1)
