@@ -120,6 +120,7 @@ function GetReady(state)
     -- state
     local time_waited = 0
 
+    -- stop the music
     function ready_to_play() return state.ready_to_play end
     local animation = Sequencer(get_ready_sequence)
 
@@ -144,6 +145,7 @@ function GetReady(state)
     end
 
     function getReady:controller()
+        music(-1)
         time_waited = time_waited + 1
 
         if time_waited > screen_delay then
