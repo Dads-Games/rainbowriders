@@ -20,6 +20,7 @@ function TitleScreen (state)
     local waiting = false
     local waiting_timer = 0
     local wait_for = 1 * 30
+    local music_playing = false
 
     -- this is to prevent the game from going through the konami code flow
     -- if we return to the title screen from anywhere else
@@ -41,6 +42,11 @@ function TitleScreen (state)
     end
 
     function title_screen_controller ()
+        -- play title music
+        if not music_playing then
+            music_playing = true
+            music(48)
+        end
 
         -- cycle through colors
         color_timer = color_timer + 1
