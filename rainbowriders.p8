@@ -19,6 +19,7 @@ __lua__
 -- SCREEN: GAME
 #include src/screens/game.lua
 #include src/screens/game/cloud_system.lua
+#include src/screens/game/aircraft_system.lua
 
 -- GLOBAL CONSTANTS
 

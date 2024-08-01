@@ -17,6 +17,7 @@ function Game(state)
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
     local clouds = CloudSystem()
+    local crafts = AircraftSystem()
 
     function is_grace_period() return grace_period_counter < grace_period end
 
@@ -36,6 +37,7 @@ function Game(state)
 
     function game_controller()
         clouds.update()
+        crafts.update()
 
         -- Increment grace period counter
         if is_grace_period() then
@@ -169,10 +171,11 @@ function Game(state)
         map(0, 0, background_x - background_n, background_y, background_n / 8, 32)
 
 
-
+        crafts.draw()
+        
         -- Draw clouds
         clouds.draw()
-
+        
         -- Draw top grass
         rectfill(0, 112-12, 128, 128, 3)
         -- Draw street
