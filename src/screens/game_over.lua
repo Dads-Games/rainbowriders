@@ -9,7 +9,7 @@ function GameOver (state)
         if game_over_timer > game_over_delay then
             -- reset the game over timer
             game_over_timer = 0
-            state.screen = screens.title
+            state.screen = TitleScreen(state)
         end
     end
 
