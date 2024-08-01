@@ -17,12 +17,6 @@ function AircraftSystem ()
             y=56,
             xw=16,
             yw=16
-        },
-        ufo = {
-            x=32,
-            y=56,
-            xw=16,
-            yw=8
         }
     }
     local zone = {
@@ -84,13 +78,15 @@ function AircraftSystem ()
         function craft:draw ()
             local x = flr(position.x)
             local y = flr(position.y)
-            
+
+            local flight = craft_sprites.plane
             if y % 2 == 0 then
-                sspr(craft_sprites.plane.x,craft_sprites.plane.y,craft_sprites.plane.xw,craft_sprites.plane.yw, x, y)
-            else
-                sspr(craft_sprites.ufo.x,craft_sprites.ufo.y,craft_sprites.ufo.xw,craft_sprites.ufo.yw, x, y)
+                flight = craft_sprites.jet
             end
+            
+            sspr(flight.x,flight.y,flight.xw,flight.yw, x, y)
         end
+
 
         function craft:update ()
             position.x = position.x - delta_x
