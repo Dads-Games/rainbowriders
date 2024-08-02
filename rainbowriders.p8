@@ -16,6 +16,7 @@ __lua__
 #include src/screens/character_select.lua
 #include src/screens/game_over.lua
 #include src/screens/get_ready.lua
+#include src/screens/credits.lua
 #include src/screens/info.lua
 
 -- SCREEN: GAME
@@ -125,6 +126,7 @@ screens = {
     get_ready        = GetReady(state),
     game             = Game(state),
     game_over        = GameOver(state),
+    credits          = Credits(state),
     info             = Info(state)
 }
 
@@ -164,8 +166,39 @@ function _init()
 end
 
 function _update()
-    state.screen.controller()
+    if state.screen and state.screen.controller then
+        state.screen.controller()
+    end
 end
+
+function _draw()
+    cls()
+    if state.screen and state.screen.view then
+        state.screen.view()
+    end
+
+    -- this must be last
+    if state.debug_mode == true then
+        print("D", 1, 1, 7)
+    end
+    if state.screen and state.screen.controller then
+        state.screen.controller()
+    end
+end
+
+function _draw()
+    cls()
+    if state.screen and state.screen.view then
+        state.screen.view()
+    end
+
+    -- this must be last
+    if state.debug_mode == true then
+        print("D", 1, 1, 7)
+    end
+end
+
+
 
 function _draw()
     cls()
