@@ -6,8 +6,8 @@ function Credits (state)
   local color_index = 1
 
  local credits_text = {
-  coders = {
-    header = "coders",
+  developers = {
+    header = "developers",
     entities = {'jon', 'michael', 'francis'}
   },
   children = {
@@ -29,14 +29,14 @@ function Credits (state)
   local total_credits_height = 0
   for _, section in pairs(credits_text) do
     total_credits_height = total_credits_height + 10 -- For header
-    total_credits_height = total_credits_height + (#section.entities * 10) -- For entities
+    total_credits_height = total_credits_height + (#section.entities * 10) +10-- For entities
   end
 
   function credits_controller()
       -- Scroll down
       scroll_pos = scroll_pos - speed
       -- Return to title screen if credits finish or upon pressing a button
-      if scroll_pos < -total_credits_height or btnp(4) then -- 'Z'
+      if scroll_pos < -total_credits_height or btnp(6) then -- 'Z'
           state.screen = screens.title
       end
       color_timer = color_timer + 1
@@ -54,22 +54,16 @@ function Credits (state)
     local y_offset = scroll_pos
     
     for _, section in pairs(credits_text) do
-      -- Calculate x position for centered header
-      local header_length = #section.header * 4
-      local header_x = (128 - header_length) / 2
-      print(section.header, header_x, y_offset, rainbow_colors[color_index])
+      printc(section.header, x, y_offset, rainbow_colors[color_index])
       
       y_offset = y_offset + 10 -- Adjust spacing after header
       
       for _, entity in ipairs(section.entities) do
-        -- Calculate x position for centered entity
-        local entity_length = #entity * 4
-        local entity_x = (128 - entity_length) / 2
-        print(entity, entity_x, y_offset, 7) -- Use calculated x position
+        printc(entity, x, y_offset, 7) -- Use calculated x position
         y_offset = y_offset + 10
       end
       
-      y_offset = y_offset + 5 -- Extra spacing between sections
+      y_offset = y_offset + 10 -- Extra spacing between sections
     end
   end
 

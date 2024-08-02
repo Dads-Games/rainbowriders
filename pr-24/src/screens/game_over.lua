@@ -9,7 +9,7 @@ function GameOver (state)
         if game_over_timer > game_over_delay then
             -- reset the game over timer
             game_over_timer = 0
-            state.screen = screens.title
+            state.screen = TitleScreen(state)
         end
     end
 
@@ -17,15 +17,15 @@ function GameOver (state)
         cls()
         -- Check high score and display if beat
         if state.score > state.high_score then
-            print("you set the new high score!", 15, 60, 7)
-            print("high score: "..state.score.." great job!", 15, 80, 7)
+            printc("you set the new high score!", 15, 60, 7)
+            printc("high score: "..state.score.." great job!", 15, 80, 7)
          
         -- Display the score on the game over screen
         elseif state.score > 0 then
-            print("game over - try again!", 20, 60, 7)
-            print("your score: "..state.score.." great job!", 15, 80, 7)
+            printc("game over - try again!", 20, 60, 7)
+            printc("your score: "..state.score.." great job!", 15, 80, 7)
         else
-            print("game over - try again!", 20, 60, 7)
+            printc("game over - try again!", 20, 60, 7)
         end
 
         -- Do not reset the timer and score here;
