@@ -160,8 +160,6 @@ function PegasusParade (zone)
     function draw ()
         draw_particles()
         
-        print ('Pegasus On Screen = ' .. #pegasuses, 0, 0, 7)
-        
         for i, pegasus in pairs(pegasuses) do
             pegasus.draw(pegasus)
         end
