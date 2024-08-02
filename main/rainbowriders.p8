@@ -9,6 +9,7 @@ __lua__
 #include src/utils/math.lua
 #include src/utils/sequencer.lua
 #include src/utils/printc.lua
+#include src/utils/enterprise.lua
 
 -- SCREENS
 #include src/screens/title.lua
