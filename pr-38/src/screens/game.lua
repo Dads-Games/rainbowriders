@@ -18,6 +18,7 @@ function Game(state)
     local grace_period_counter = 0
     local clouds = CloudSystem()
     local enterprise = Enterprise()
+    local crafts = AircraftSystem()
 
     function is_grace_period() return grace_period_counter < grace_period end
 
@@ -46,6 +47,7 @@ function Game(state)
             enterprise.trigger()
         end 
         
+        crafts.update()
 
         -- Increment grace period counter
         if is_grace_period() then
@@ -178,9 +180,11 @@ function Game(state)
         map(0, 0, background_x, background_y, background_n / 8, 32)
         map(0, 0, background_x - background_n, background_y, background_n / 8, 32)
 
+        crafts.draw()
+        
         -- Draw clouds
         clouds.draw()
-
+        
         -- Draw top grass
         rectfill(0, 112-12, 128, 128, 3)
         -- Draw street
