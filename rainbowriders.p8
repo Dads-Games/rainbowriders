@@ -15,6 +15,7 @@ __lua__
 #include src/screens/character_select.lua
 #include src/screens/game_over.lua
 #include src/screens/get_ready.lua
+#include src/screens/info.lua
 
 -- SCREEN: GAME
 #include src/screens/game.lua
@@ -123,11 +124,14 @@ screens = {
     get_ready        = GetReady(state),
     game             = Game(state),
     game_over        = GameOver(state),
+    info             = Info(state)
 }
 
 -- Timer variables
 timer = 0
 timer_frame_counter = 0
+
+
 
 function _init()
     state.screen = screens.title
