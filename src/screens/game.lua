@@ -17,6 +17,7 @@ function Game(state)
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
     local clouds = CloudSystem()
+    local enterprise = Enterprise()
     local crafts = AircraftSystem()
 
     function is_grace_period() return grace_period_counter < grace_period end
@@ -37,6 +38,15 @@ function Game(state)
 
     function game_controller()
         clouds.update()
+        enterprise.controller()
+
+        local scoreMod = 100
+        local scoreThreshold = 5
+        -- if scoreMod is within scoreThreshold of the score, trigger the enterprise
+        if state.score > 75 and state.score % scoreMod < scoreThreshold then
+            enterprise.trigger()
+        end 
+        
         crafts.update()
 
         -- Increment grace period counter
@@ -170,7 +180,6 @@ function Game(state)
         map(0, 0, background_x, background_y, background_n / 8, 32)
         map(0, 0, background_x - background_n, background_y, background_n / 8, 32)
 
-
         crafts.draw()
         
         -- Draw clouds
@@ -186,7 +195,6 @@ function Game(state)
         rectfill(0, 112+8, 128, 128, 3)
          -- Draw bottom curb
         rectfill(0, 112+8, 128, 112+8, 5)
-
 
         -- Draw grass
         for blade in all(grass) do spr(blade.sprite, blade.x, blade.y) end
@@ -205,6 +213,8 @@ function Game(state)
 
         -- Draw the timer
         print(timer, 115, 5, 7)
+
+        enterprise.view()
 
         -- Draw the score at the bottom left
         print("score: " .. state.score, 5, 122, 7)
