@@ -13,12 +13,26 @@ function Game(state)
     local game_over = false
     local background_x = 0
     local background_n = 128 * 8 -- number of tiles wide for the background in the map * 8
-    local background_y = 96 - 16 - 12-- 84
+    local background_y = 96 - 16 - 12 -- 84
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
     local clouds = CloudSystem()
     local enterprise = Enterprise()
     local crafts = AircraftSystem()
+    local parade = PegasusParade({
+        top = 0,
+        bottom = 80,
+        left = 0,
+        right = 128,
+    })
+    
+    local enterpriseScoreMod = 100
+    local paradeScoreMod = 1000
+    local scoreThreshold = 5
+
+    -- throttle triggers
+    local paradeTrigger = throttle(parade.trigger, 5)
+    local enterpriseTrigger = throttle(enterprise.trigger, 5)
 
     function is_grace_period() return grace_period_counter < grace_period end
 
@@ -39,14 +53,19 @@ function Game(state)
     function game_controller()
         clouds.update()
         enterprise.controller()
+        parade.update()
 
-        local scoreMod = 100
-        local scoreThreshold = 5
-        -- if scoreMod is within scoreThreshold of the score, trigger the enterprise
-        if state.score > 75 and state.score % scoreMod < scoreThreshold then
-            enterprise.trigger()
-        end 
-        
+        -- if state.score > 1000 then trigger parade
+        if (state.score > 50) then
+            if state.score % paradeScoreMod < scoreThreshold then
+                paradeTrigger()
+
+            -- else if state.score > 500 then trigger enterprise
+            elseif state.score % enterpriseScoreMod < scoreThreshold then
+                enterpriseTrigger()
+            end
+        end
+
         crafts.update()
 
         -- Increment grace period counter
@@ -56,12 +75,9 @@ function Game(state)
 
         -- Check for collisions
         for obstacle in all(obstacles) do
-            if (
-                player.x < obstacle.x + obstacle.width 
-                and player.x + 8 > obstacle.x 
-                and player.y < obstacle.y + obstacle.height 
-                and player.y + 8 > obstacle.y
-            ) then
+            if (player.x < obstacle.x + obstacle.width and player.x + 8 >
+                obstacle.x and player.y < obstacle.y + obstacle.height and
+                player.y + 8 > obstacle.y) then
                 music(1, 0, 0)
                 screen = screens.game_over
                 del(obstacles, obstacle)
@@ -150,7 +166,7 @@ function Game(state)
             add(grass, {x = 128, y = 114 + rnd(8), sprite = flr(rnd(3)) + 82})
         end
         if (background_x % 24) == 0 then
-            --add(grass, {x = 128, y = 93 + rnd(4), sprite = flr(rnd(3)) + 82})
+            -- add(grass, {x = 128, y = 93 + rnd(4), sprite = flr(rnd(3)) + 82})
         end
         for blade in all(grass) do
             blade.x = blade.x - 2
@@ -173,28 +189,33 @@ function Game(state)
             -- Draw sun
             spr(96, 10, 10)
             -- color palette hack for a brighter blue background
-            pal({[0] = 0, 140, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}, 1)
+            pal({[0] = 0, 140, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15},
+                1)
         end
 
         -- Draw map as background
         map(0, 0, background_x, background_y, background_n / 8, 32)
-        map(0, 0, background_x - background_n, background_y, background_n / 8, 32)
+        map(0, 0, background_x - background_n, background_y, background_n / 8,
+            32)
 
         crafts.draw()
-        
+
         -- Draw clouds
         clouds.draw()
-        
+
+        -- PURRRADE YOOO
+        parade.draw()
+
         -- Draw top grass
-        rectfill(0, 112-12, 128, 128, 3)
+        rectfill(0, 112 - 12, 128, 128, 3)
         -- Draw street
-        rectfill(0, 112-8, 128, 128, 0)
+        rectfill(0, 112 - 8, 128, 128, 0)
         -- Draw top curb
-        rectfill(0, 112-8, 128, 112-8, 5)
+        rectfill(0, 112 - 8, 128, 112 - 8, 5)
         -- Draw bottom grass
-        rectfill(0, 112+8, 128, 128, 3)
-         -- Draw bottom curb
-        rectfill(0, 112+8, 128, 112+8, 5)
+        rectfill(0, 112 + 8, 128, 128, 3)
+        -- Draw bottom curb
+        rectfill(0, 112 + 8, 128, 112 + 8, 5)
 
         -- Draw grass
         for blade in all(grass) do spr(blade.sprite, blade.x, blade.y) end
