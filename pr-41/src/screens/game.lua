@@ -56,12 +56,14 @@ function Game(state)
         parade.update()
 
         -- if state.score > 1000 then trigger parade
-        if state.score % paradeScoreMod < scoreThreshold then
-            paradeTrigger()
+        if (state.score > 50) then
+            if state.score % paradeScoreMod < scoreThreshold then
+                paradeTrigger()
 
-        -- else if state.score > 500 then trigger enterprise
-        elseif state.score % enterpriseScoreMod < scoreThreshold then
-            enterpriseTrigger()
+            -- else if state.score > 500 then trigger enterprise
+            elseif state.score % enterpriseScoreMod < scoreThreshold then
+                enterpriseTrigger()
+            end
         end
 
         crafts.update()
