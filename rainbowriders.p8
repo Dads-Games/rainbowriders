@@ -3,6 +3,7 @@ version 42
 __lua__
 
 -- UTILITIES
+#include src/utils/throttle.lua
 #include src/utils/colors.lua
 #include src/utils/special_effects.lua
 #include src/utils/rbp_rainbow.lua
@@ -10,6 +11,7 @@ __lua__
 #include src/utils/sequencer.lua
 #include src/utils/printc.lua
 #include src/utils/enterprise.lua
+#include src/utils/pegasus_parade.lua
 
 -- SCREENS
 #include src/screens/title.lua
@@ -23,7 +25,6 @@ __lua__
 #include src/screens/game/aircraft_system.lua
 
 -- GLOBAL CONSTANTS
-
 KRIDERS = {
     {
         name = "lizzie",
@@ -77,6 +78,7 @@ PRIDERS = {
         sprite = 13
     }
 }
+
 -- GAME STATE
 function GameState ()
     return {
