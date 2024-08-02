@@ -25,7 +25,6 @@ function Credits (state)
 }
   local rainbow_colors = {8, 9, 10, 11, 12, 13, 14}
 
-
   local total_credits_height = 0
   for _, section in pairs(credits_text) do
     total_credits_height = total_credits_height + 10 -- For header
@@ -33,6 +32,8 @@ function Credits (state)
   end
 
   function credits_controller()
+    if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
+    if (keypress == 'p') poke(0x5f30,1) --suppress 'p' for pause
       -- Scroll down
       scroll_pos = scroll_pos - speed
       -- Return to title screen if credits finish or upon pressing a button
