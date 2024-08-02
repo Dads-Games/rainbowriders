@@ -126,6 +126,7 @@ screens = {
     game             = Game(state),
     game_over        = GameOver(state),
     credits          = Credits(state),
+    credits          = Credits(state),
 }
 
 -- Timer variables
@@ -177,7 +178,23 @@ function _draw()
     if state.debug_mode == true then
         print("D", 1, 1, 7)
     end
+    if state.screen and state.screen.controller then
+        state.screen.controller()
+    end
 end
+
+function _draw()
+    cls()
+    if state.screen and state.screen.view then
+        state.screen.view()
+    end
+
+    -- this must be last
+    if state.debug_mode == true then
+        print("D", 1, 1, 7)
+    end
+end
+
 
 
 function _draw()
