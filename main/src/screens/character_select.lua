@@ -5,6 +5,7 @@ function CharacterSelect(state)
         local selected_rider_index = state.player.rider
         local next_rider_index = min(#RIDERS, selected_rider_index + 1)
         local prev_rider_index = max(1, selected_rider_index - 1)
+        if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
 
         -- button: left
         if btnp(0) then
@@ -18,7 +19,7 @@ function CharacterSelect(state)
         end
 
         -- Confirm selection and start game
-        if btnp(4) or btnp (5) then
+        if btnp(4) or btnp (5) or btnp (6) then
             state.screen = GetReady(state)
             sfx(59) -- character selected sfx
         end
@@ -44,7 +45,7 @@ function CharacterSelect(state)
         end
         printc(RIDERS[selected_rider_index].name, 50, 65, 7) -- Display character name
         printc("press left or right", 20, 90, 7)
-        printc("a or b buttons to confirm", 30, 100, 7)
+        printc("then start to confirm", 30, 100, 7)
 
     end
 

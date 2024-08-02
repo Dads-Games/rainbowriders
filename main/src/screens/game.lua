@@ -126,7 +126,7 @@ function Game(state)
             if not state.debug_mode then
                 sprite_obstacle = flr(rnd(12)) + 192
                 if sprite_obstacle == 192 then
-                    sfx(61) -- play poop sfx for poop spawn
+                    --sfx(61) -- play poop sfx for poop spawn
                 end
                 add(obstacles, {
                     x = 128,
@@ -233,7 +233,7 @@ function Game(state)
         end
 
         -- Draw the timer
-        print(timer, 115, 5, 7)
+        --print(timer, 115, 5, 7)
 
         enterprise.view()
 

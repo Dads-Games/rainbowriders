@@ -4,7 +4,7 @@ function TitleScreen (state)
     local color_index = 1
     local rainbow_colors = {8, 9, 10, 11, 12, 13, 14}
     local selection = 1
-    local menu_items = {"start game", "credits"}
+    local menu_items = {"game", "info", "credits"}
 
     local KEYS = {
         UP = 0,
@@ -143,7 +143,9 @@ function TitleScreen (state)
                 timer_frame_counter = 0
                 state.score = 0
             elseif selection == 2 then
-                state.screen = Credits(state) --screens.credits
+                state.screen = Info(state) 
+            elseif selection == 3 then
+                state.screen = Credits(state)
             end
         end
     end
@@ -171,7 +173,7 @@ function TitleScreen (state)
             if selection == i then
                 print("->", 30, y_position, 7)
             end
-            print(item, 40, y_position, 7)
+            printc(item, 40, y_position, 7)
         end
 
         -- Check and set high score
