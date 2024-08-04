@@ -1,5 +1,5 @@
 function EngineTrail()
-    local warpDriveTrail = {}
+    local eTrail = {}
     local colors_over_lifetime = {
         { color = 7, percent = 0.1 },
         { color = 10, percent = 0.3 },
@@ -20,9 +20,9 @@ function EngineTrail()
         }
     end
 
-    function warpDriveTrail:update(x, y)
+    function eTrail:update(x, y)
         for p in all(particles) do
-            p.life -= rnd(0.1)
+            p.life -= rnd(0.5)
             p.x += p.speed
             if p.life <= 0 then
                 p.x, p.y, p.speed, p.life, p.starting_life = x, y, rnd(0.075) + 0.25, rnd(0.25) + 0.5, rnd(0.25) + 0.5
@@ -30,7 +30,7 @@ function EngineTrail()
         end
     end
 
-    function warpDriveTrail:draw()
+    function eTrail:draw()
         for p in all(particles) do
             local percent = 1 - (p.life / p.starting_life)
             local color = 8
@@ -44,15 +44,15 @@ function EngineTrail()
         end
     end
 
-    for i = 1, 333 do
+    for i = 1, 30 do
         add(particles, Particle(-30, -30))
     end
     
-    return warpDriveTrail
+    return eTrail
 end
 
 function Xwing(triggerThreshold)
-    triggerThreshold = triggerThreshold or 100
+    local triggerThreshold = triggerThreshold or 100
     local animation_system = { position = { x = -100, y = 50 } }
     local active, triggerDelta = false, nil
     local wdt1, wdt2 = EngineTrail(), EngineTrail()
@@ -76,8 +76,10 @@ function Xwing(triggerThreshold)
         local sx, sy = (124 % 16) * 8, flr(124 / 16) * 8
         local ox, oy = origin(0, 0)
         sspr(sx, sy, 32, 16, ox, oy)
-        wdt1:draw()
-        wdt2:draw()
+        if ox > -128 and ox < 128 then
+            wdt1:draw()
+            wdt2:draw()
+        end
     end
 
     local function tryToTrigger()
