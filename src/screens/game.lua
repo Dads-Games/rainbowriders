@@ -18,6 +18,7 @@ function Game(state)
     local grace_period_counter = 0
     local clouds = CloudSystem()
     local enterprise = Enterprise()
+    local xwing = Xwing()
     local crafts = AircraftSystem()
     local parade = PegasusParade({
         top = 0,
@@ -26,13 +27,16 @@ function Game(state)
         right = 128,
     })
     
-    local enterpriseScoreMod = 100
-    local paradeScoreMod = 1000
+    local enterpriseScoreMod = 20
+    local xwingScoreMod = 10
+    local paradeScoreMod = 100
     local scoreThreshold = 5
 
     -- throttle triggers
     local paradeTrigger = throttle(parade.trigger, 5)
     local enterpriseTrigger = throttle(enterprise.trigger, 5)
+    local xwingTrigger = throttle(xwing.trigger, 5)
+
 
     function is_grace_period() return grace_period_counter < grace_period end
 
@@ -53,16 +57,18 @@ function Game(state)
     function game_controller()
         clouds.update()
         enterprise.controller()
+        xwing.controller()
         parade.update()
 
         -- if state.score > 1000 then trigger parade
-        if (state.score > 50) then
+        if (state.score > 20) then
             if state.score % paradeScoreMod < scoreThreshold then
                 paradeTrigger()
 
             -- else if state.score > 500 then trigger enterprise
-            elseif state.score % enterpriseScoreMod < scoreThreshold then
-                enterpriseTrigger()
+            elseif state.score % xwingScoreMod < scoreThreshold then
+                --enterpriseTrigger()
+                xwingTrigger()
             end
         end
 
@@ -236,6 +242,7 @@ function Game(state)
         --print(timer, 115, 5, 7)
 
         enterprise.view()
+        xwing.view()
 
         -- Draw the score at the bottom left
         print("score: " .. state.score, 5, 122, 7)

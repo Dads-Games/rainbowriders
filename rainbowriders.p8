@@ -11,6 +11,7 @@ __lua__
 #include src/utils/sequencer.lua
 #include src/utils/printc.lua
 #include src/utils/enterprise.lua
+#include src/utils/xwing.lua
 #include src/utils/pegasus_parade.lua
 
 -- SCREENS
