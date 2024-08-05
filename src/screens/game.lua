@@ -16,6 +16,7 @@ function Game(state)
     local background_y = 96 - 16 - 12 -- 84
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
+    local animation = 0
     local clouds = CloudSystem()
     local enterprise = Enterprise()
     local xwing = Xwing()
@@ -27,9 +28,10 @@ function Game(state)
         right = 128,
     })
     
-    local enterpriseScoreMod = 20
-    local xwingScoreMod = 10
-    local paradeScoreMod = 100
+    local enterpriseScoreMod = 30
+    local xwingScoreMod = 60
+    local ufoScoreMod = 90
+    local paradeScoreMod = 120
     local scoreThreshold = 5
 
     -- throttle triggers
@@ -65,10 +67,14 @@ function Game(state)
             if state.score % paradeScoreMod < scoreThreshold then
                 paradeTrigger()
 
-            -- else if state.score > 500 then trigger enterprise
-            elseif state.score % xwingScoreMod < scoreThreshold then
-                --enterpriseTrigger()
+                -- else if state.score > 500 then trigger enterprise
+            elseif state.score % ufoScoreMod < scoreThreshold then
+                enterpriseTrigger()
                 xwingTrigger()
+            elseif state.score % xwingScoreMod < scoreThreshold then
+                xwingTrigger()
+            elseif state.score % enterpriseScoreMod < scoreThreshold then
+                enterpriseTrigger()
             end
         end
 
@@ -228,7 +234,24 @@ function Game(state)
 
         -- Draw player
         local rider_sprite = RIDERS[player.rider].sprite
-        draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
+        --if rider_sprite == 13 then
+            if animation < 30/2 then
+                draw_stretched_sprite(rider_sprite+16, player.x, player.y, player.dy)
+            else
+                draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
+            end
+        --else
+        --  draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
+        --end
+        if player.on_ground == true then
+            if rider_sprite >= 13 then timing = 30 else timing = 60 end
+            if animation == timing then
+                animation = 0
+            else
+                animation += 1
+            end
+        end
+        
 
         -- EXPERIMENTAL FEATURE: Jelly's Rainbow Progression
         rbp_draw_update(player, state.score)

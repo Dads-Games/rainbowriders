@@ -1,19 +1,3 @@
-function Laser(x, y)
-    return {
-        x = x,
-        y = y,
-        speed = 4,
-        update = function(self)
-            self.x -= self.speed
-        end,
-        draw = function(self)
-            rectfill(self.x, self.y, self.x + 2, self.y + 1, 8)
-        end,
-        is_off_screen = function(self)
-            return self.x < 0
-        end
-    }
-end
 function EngineTrail()
     local eTrail = {}
     local colors_over_lifetime = {
@@ -26,7 +10,7 @@ function EngineTrail()
     local particles = {}
 
     local function Particle(x, y)
-        local starting_life = rnd(0.25) + 0.5
+        local starting_life = rnd(0.25) + 0.51
         return {
             x = x,
             y = y,
@@ -72,42 +56,20 @@ function Xwing(triggerThreshold)
     local animation_system = { position = { x = -100, y = 50 } }
     local active, triggerDelta = false, nil
     local wdt1, wdt2 = EngineTrail(), EngineTrail()
-    local lasers = {}
-    local swoop_amplitude = 12
-    local swoop_frequency = 0.005
-    local laserTime = 0
 
     local function origin(relative_x, relative_y)
         return animation_system.position.x + relative_x, animation_system.position.y + relative_y
     end
 
     local function controller()
-
-            animation_system.position.x -= 2
-            animation_system.position.y = 50 + sin(animation_system.position.x * swoop_frequency) * swoop_amplitude
-            if triggerDelta then triggerDelta += 1 end
-            if active and animation_system.position.x < -64 then
-                animation_system.position.x = 200
-                active = false
-            end
-            wdt1:update(origin(30, 6))
-            wdt2:update(origin(30, 10))
-            -- Update lasers
-            for laser in all(lasers) do
-                laser:update()
-                if laser:is_off_screen() then
-                    del(lasers, laser)
-                end
-            end
-            
-            if (laserTime % 10 == 0) then
-                add(lasers, Laser(origin(8, 0)))
-            end
-            if (laserTime % 15 == 0) then
-                add(lasers, Laser(origin(8, 16)))
-            end    
-            if laserTime then laserTime += 1 end
-
+        animation_system.position.x -= 3
+        if triggerDelta then triggerDelta += 1 end
+        if active and animation_system.position.x < -64 then
+            animation_system.position.x = 200
+            active = false
+        end
+        wdt1:update(origin(30, 6))
+        wdt2:update(origin(30, 10))
     end
 
     local function view()
@@ -118,15 +80,10 @@ function Xwing(triggerThreshold)
             wdt1:draw()
             wdt2:draw()
         end
-
-        -- Draw lasers
-        for laser in all(lasers) do
-            laser:draw()
-        end
     end
 
     local function tryToTrigger()
-        if triggerDelta == nil or triggerDelta > triggerThreshold then
+        if not triggerDelta or triggerDelta > triggerThreshold then
             active, triggerDelta = true, 0
         end
     end

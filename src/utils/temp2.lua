@@ -1,3 +1,4 @@
+-- Define the laser class
 function Laser(x, y)
     return {
         x = x,
@@ -14,6 +15,8 @@ function Laser(x, y)
         end
     }
 end
+
+-- Define the EngineTrail class
 function EngineTrail()
     local eTrail = {}
     local colors_over_lifetime = {
@@ -67,31 +70,34 @@ function EngineTrail()
     return eTrail
 end
 
+-- Define the Xwing class
 function Xwing(triggerThreshold)
     local triggerThreshold = triggerThreshold or 100
     local animation_system = { position = { x = -100, y = 50 } }
     local active, triggerDelta = false, nil
     local wdt1, wdt2 = EngineTrail(), EngineTrail()
     local lasers = {}
-    local swoop_amplitude = 12
-    local swoop_frequency = 0.005
-    local laserTime = 0
+    local swoop_amplitude = 8
+    local swoop_frequency = 0.0125
 
     local function origin(relative_x, relative_y)
         return animation_system.position.x + relative_x, animation_system.position.y + relative_y
     end
 
     local function controller()
-
+        if active then
             animation_system.position.x -= 2
             animation_system.position.y = 50 + sin(animation_system.position.x * swoop_frequency) * swoop_amplitude
+            
             if triggerDelta then triggerDelta += 1 end
             if active and animation_system.position.x < -64 then
                 animation_system.position.x = 200
                 active = false
             end
+            
             wdt1:update(origin(30, 6))
             wdt2:update(origin(30, 10))
+            
             -- Update lasers
             for laser in all(lasers) do
                 laser:update()
@@ -99,15 +105,12 @@ function Xwing(triggerThreshold)
                     del(lasers, laser)
                 end
             end
-            
-            if (laserTime % 10 == 0) then
-                add(lasers, Laser(origin(8, 0)))
-            end
-            if (laserTime % 15 == 0) then
-                add(lasers, Laser(origin(8, 16)))
-            end    
-            if laserTime then laserTime += 1 end
 
+            -- Shoot laser every 30 frames
+            if (triggerDelta % 30 == 0) then
+                add(lasers, Laser(origin(-8, 8)))
+            end
+        end
     end
 
     local function view()
@@ -126,7 +129,7 @@ function Xwing(triggerThreshold)
     end
 
     local function tryToTrigger()
-        if triggerDelta == nil or triggerDelta > triggerThreshold then
+        if not triggerDelta or triggerDelta > triggerThreshold then
             active, triggerDelta = true, 0
         end
     end
