@@ -16,8 +16,10 @@ function Game(state)
     local background_y = 96 - 16 - 12 -- 84
     local grace_period = 30 * 3 -- 3 seconds
     local grace_period_counter = 0
+    local animation = 0
     local clouds = CloudSystem()
     local enterprise = Enterprise()
+    local xwing = Xwing()
     local crafts = AircraftSystem()
     local parade = PegasusParade({
         top = 0,
@@ -27,14 +29,17 @@ function Game(state)
     })
     local alienShip = AlienShip()
     
-    local enterpriseScoreMod = 100
-    local paradeScoreMod = 1000
+    local enterpriseScoreMod = 30
+    local xwingScoreMod = 60
+    local ufoScoreMod = 90
+    local paradeScoreMod = 120
     local scoreThreshold = 5
 
     -- throttle triggers
     local paradeTrigger = throttle(parade.trigger, 5)
     local enterpriseTrigger = throttle(enterprise.trigger, 5)
     local alienShipTrigger = throttle(alienShip.trigger, 5)
+    local xwingTrigger = throttle(xwing.trigger, 5)
 
     function is_grace_period() return grace_period_counter < grace_period end
 
@@ -55,15 +60,21 @@ function Game(state)
     function game_controller()
         clouds.update()
         enterprise.controller()
+        xwing.controller()
         parade.update()
         alienShip.controller()
 
         -- if state.score > 1000 then trigger parade
-        if (state.score > 50) then
+        if (state.score > 20) then
             if state.score % paradeScoreMod < scoreThreshold then
                 paradeTrigger()
 
-            -- else if state.score > 500 then trigger enterprise
+                -- else if state.score > 500 then trigger enterprise
+            elseif state.score % ufoScoreMod < scoreThreshold then
+                enterpriseTrigger()
+                xwingTrigger()
+            elseif state.score % xwingScoreMod < scoreThreshold then
+                xwingTrigger()
             elseif state.score % enterpriseScoreMod < scoreThreshold then
                 enterpriseTrigger()
             end
@@ -104,6 +115,7 @@ function Game(state)
             sfx(62)
             player.dy = player.jump_strength
             player.on_ground = false
+            animation = 50
         end
 
         -- Apply gravity
@@ -229,7 +241,24 @@ function Game(state)
 
         -- Draw player
         local rider_sprite = RIDERS[player.rider].sprite
-        draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
+        --if rider_sprite == 13 then
+            if animation < 30/2 then
+                draw_stretched_sprite(rider_sprite+16, player.x, player.y, player.dy)
+            else
+                draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
+            end
+        --else
+        --  draw_stretched_sprite(rider_sprite, player.x, player.y, player.dy)
+        --end
+        if player.on_ground == true then
+            if rider_sprite >= 13 then timing = 30 else timing = 60 end
+            if animation >= timing then
+                animation = 0
+            else
+                animation += 1
+            end
+        end
+        
 
         -- EXPERIMENTAL FEATURE: Jelly's Rainbow Progression
         rbp_draw_update(player, state.score)
@@ -244,12 +273,14 @@ function Game(state)
 
         enterprise.view()
         alienShip.view()
+        xwing.view()
 
         -- Draw the score at the bottom left
         print("score: " .. state.score, 5, 122, 7)
 
         -- Draw high score at the bottom right
         print("high score: " .. state.high_score, 60, 122, 7)
+        print(animation, 30,30,7)
     end
 
     return {view = game_view, controller = game_controller}
