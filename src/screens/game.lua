@@ -27,6 +27,7 @@ function Game(state)
         left = 0,
         right = 128,
     })
+    local alienShip = AlienShip()
     
     local enterpriseScoreMod = 30
     local xwingScoreMod = 60
@@ -37,8 +38,8 @@ function Game(state)
     -- throttle triggers
     local paradeTrigger = throttle(parade.trigger, 5)
     local enterpriseTrigger = throttle(enterprise.trigger, 5)
+    local alienShipTrigger = throttle(alienShip.trigger, 5)
     local xwingTrigger = throttle(xwing.trigger, 5)
-
 
     function is_grace_period() return grace_period_counter < grace_period end
 
@@ -61,6 +62,7 @@ function Game(state)
         enterprise.controller()
         xwing.controller()
         parade.update()
+        alienShip.controller()
 
         -- if state.score > 1000 then trigger parade
         if (state.score > 20) then
@@ -76,6 +78,10 @@ function Game(state)
             elseif state.score % enterpriseScoreMod < scoreThreshold then
                 enterpriseTrigger()
             end
+        end
+
+        if (state.score > 35 and state.score < 40) then
+            alienShipTrigger()
         end
 
         crafts.update()
@@ -266,6 +272,7 @@ function Game(state)
         --print(timer, 115, 5, 7)
 
         enterprise.view()
+        alienShip.view()
         xwing.view()
 
         -- Draw the score at the bottom left

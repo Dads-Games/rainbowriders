@@ -26,17 +26,7 @@ function PegasusParade (zone)
 
     local step = 0
 
-    function draw_big_peglette (x, y, flip_x, flip_y)
-        x = x or 0
-        y = y or 0
-        flip_x = flip_x or false
-        flip_y = flip_y or false
-
-        local sx = (208 % 16) * 8
-        local sy = flr(208 / 16) * 8 + 6
-        
-        sspr(sx, sy, 24, 22, x, y, 24, 22, flip_x, flip_y)
-    end
+    function draw_big_peglette(a,b,c,d)a=a or 0;b=b or 0;c=c or false;d=d or false;local e=208%16*8;local f=flr(208/16)*8+6;sspr(e,f,24,22,a,b,24,22,c,d)end
 
     function draw_small_peglette (x, y, flip_x, flip_y)
         x = x or 0
