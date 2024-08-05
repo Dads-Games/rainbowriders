@@ -5,7 +5,7 @@
 ![rainbowriders](https://github.com/Dads-Games/pico-8/blob/main/screenshots_rainbowriders.gif)
 
 Play the latest build!
-[https://dads-games.github.io/pico-8/rainbowriders.html](https://dads-games.github.io/pico-8/rainbowriders.html)
+[https://dads-games.github.io/pico-8/rainbowriders.html](https://dads-games.github.io/rainbowriders/rainbowriders.html)
 
 # Dads' Games
 Games made by Dads
