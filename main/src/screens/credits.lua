@@ -16,7 +16,7 @@ function Credits (state)
   },
   betaTesters = {
     header = "beta testers",
-    entities = {'imadabes', 'kenny', 'sara', 'maverick', 'gavin', 'lukas', 'lily', 'riker', 'lizzie'}
+    entities = {'imadabes', 'kenny', 'sara', 'amanda', 'berekley', 'maverick', 'gavin', 'lukas', 'lily', 'riker', 'lizzie'}
   },
   specialThanks = {
     header= 'special thanks',
