@@ -30,6 +30,7 @@ function CharacterSelect(state)
         local selected_rider_index = state.player.rider
         if state.konami == true then
             RIDERS = PRIDERS
+            state.daytime = false
         elseif state.konami == false then
             RIDERS = KRIDERS
         end
