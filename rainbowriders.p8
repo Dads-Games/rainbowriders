@@ -25,6 +25,7 @@ __lua__
 #include src/screens/game.lua
 #include src/screens/game/cloud_system.lua
 #include src/screens/game/aircraft_system.lua
+#include src/screens/game/alien_ship.lua
 
 -- GLOBAL CONSTANTS
 KRIDERS = {
@@ -135,8 +136,6 @@ screens = {
 -- Timer variables
 timer = 0
 timer_frame_counter = 0
-
-
 
 function _init()
     state.screen = screens.title
