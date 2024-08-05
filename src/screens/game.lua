@@ -109,6 +109,7 @@ function Game(state)
             sfx(62)
             player.dy = player.jump_strength
             player.on_ground = false
+            animation = 50
         end
 
         -- Apply gravity
@@ -245,7 +246,7 @@ function Game(state)
         --end
         if player.on_ground == true then
             if rider_sprite >= 13 then timing = 30 else timing = 60 end
-            if animation == timing then
+            if animation >= timing then
                 animation = 0
             else
                 animation += 1
@@ -272,6 +273,7 @@ function Game(state)
 
         -- Draw high score at the bottom right
         print("high score: " .. state.high_score, 60, 122, 7)
+        print(animation, 30,30,7)
     end
 
     return {view = game_view, controller = game_controller}
