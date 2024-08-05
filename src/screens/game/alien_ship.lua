@@ -11,14 +11,58 @@ function AlienShip (backDropSpeed)
 
     -- track the step in the sequence and the seconds in the timeline
     local step
-    local secondsInTimeline
+    local timeline
 
     -- clipping state for the alien beam in the sprite sheet
     local clipY
     local renderParticles
 
+    -- an ordered table of functions
+    local sequence
+
     function init ()
         enabled = false
+
+        sequence = {
+            {
+                runUntil = 3,
+                fn = function ()
+                    hover()
+                    moveIntoView()
+                end,
+            },
+            -- rotate the hover
+            {
+                runUntil = 4,
+                fn = function ()
+                    hover()
+                    renderParticles = false
+                end,
+            },
+            -- move to drop zone
+            {
+                runUntil = 6,
+                fn = function ()
+                    moveToDropZone()
+                end,
+            },
+            -- extend the beam
+            {
+                runUntil = 15,
+                fn = function ()
+                    moveToDropZone()
+                    beamExtend()
+                    renderParticles = true
+                end,
+            },
+            -- retract the beam
+            {
+                runUntil = 16,
+                fn = function ()
+                    disable()
+                end,
+            },
+        }
 
         position = {
             x = 200,
@@ -44,54 +88,12 @@ function AlienShip (backDropSpeed)
     
         -- track the step in the sequence and the seconds in the timeline
         step = 1
-        secondsInTimeline = 0
+        timeline = 0
     
         -- clipping state for the alien beam in the sprite sheet
         clipY = 8
         renderParticles = false
     end
-
-    -- an ordered table of functions
-    local sequence = {
-        {
-            runUntil = 3,
-            fn = function ()
-                rotateHover()
-                moveIntoView()
-            end,
-        },
-        -- rotate the hover
-        {
-            runUntil = 4,
-            fn = function ()
-                rotateHover()
-                renderParticles = false
-            end,
-        },
-        -- move to drop zone
-        {
-            runUntil = 6,
-            fn = function ()
-                moveToDropZone()
-            end,
-        },
-        -- extend the beam
-        {
-            runUntil = 15,
-            fn = function ()
-                moveToDropZone()
-                beamExtend()
-                renderParticles = true
-            end,
-        },
-        -- retract the beam
-        {
-            runUntil = 16,
-            fn = function ()
-                disable()
-            end,
-        },
-    }
 
     local dropZone = { 100, 88 }
     function moveToDropZone ()
@@ -115,15 +117,9 @@ function AlienShip (backDropSpeed)
         position.y = position.y + dy * ease
     end
 
-    function rotateHover ()
+    function hover ()
         secondaryPosition.x = sin(step / 40) * 14
         secondaryPosition.y = cos(step / 40) * 14
-    end
-
-    function beamRetract ()
-        if clipY > 8 then
-            clipY = clipY - 0.2
-        end
     end
 
     function beamExtend ()
@@ -176,7 +172,7 @@ function AlienShip (backDropSpeed)
         end
 
         -- there are 30 steps in a second
-        secondsInTimeline = flr(step / 30)
+        timeline = flr(step / 30)
 
         -- let's check if we need to move to the next sequence
         local activeSequence = sequence[1]
@@ -185,7 +181,7 @@ function AlienShip (backDropSpeed)
         -- remove the first item from the table and set the next sequence to the first item
         if (
             activeSequence.runUntil 
-            and secondsInTimeline > activeSequence.runUntil 
+            and timeline > activeSequence.runUntil 
             and #sequence > 1
         ) then
             del(sequence, activeSequence)
