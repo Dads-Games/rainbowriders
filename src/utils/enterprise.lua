@@ -107,7 +107,7 @@ function WarpDriveTrail ()
 
     -- init: spawn 20 particles to start
     for i = 1, 550 do
-        add(particles, warpDriveTrail:Particle(30, 30))
+        add(particles, warpDriveTrail:Particle(-30, -30))
     end
     
     return warpDriveTrail
