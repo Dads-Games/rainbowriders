@@ -4,7 +4,7 @@ function Laser(x, y)
         y = y,
         speed = 4,
         update = function(self)
-            self.x -= self.speed
+            self.x = self.x - self.speed
         end,
         draw = function(self)
             rectfill(self.x, self.y, self.x + 2, self.y + 1, 8)
@@ -38,8 +38,8 @@ function EngineTrail()
 
     function eTrail:update(x, y)
         for p in all(particles) do
-            p.life -= rnd(0.5)
-            p.x += p.speed
+            p.life = p.life - rnd(0.5)
+            p.x = p.x + p.speed
             if p.life <= 0 then
                 p.x, p.y, p.speed, p.life, p.starting_life = x, y, rnd(0.075) + 0.25, rnd(0.25) + 0.5, rnd(0.25) + 0.5
             end
@@ -83,9 +83,9 @@ function Xwing(triggerThreshold)
 
     local function controller()
 
-            animation_system.position.x -= 2
+            animation_system.position.x = animation_system.position.x - 2
             animation_system.position.y = 50 + sin(animation_system.position.x * swoop_frequency) * swoop_amplitude
-            if triggerDelta then triggerDelta += 1 end
+            if triggerDelta then triggerDelta = triggerDelta + 1 end
             if active and animation_system.position.x < -64 then
                 animation_system.position.x = 200
                 active = false
@@ -106,7 +106,7 @@ function Xwing(triggerThreshold)
             if (laserTime % 15 == 0) then
                 add(lasers, Laser(origin(8, 16)))
             end    
-            if laserTime then laserTime += 1 end
+            if laserTime then laserTime = laserTime + 1 end
 
     end
 

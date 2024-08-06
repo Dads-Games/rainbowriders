@@ -62,8 +62,7 @@ function TitleScreen (state)
 
         -- track the last keys pressed for the konami code
         local last_key_pressed = nil
-        if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
-        if (keypress == 'p') poke(0x5f30,1) --suppress 'p' for pause
+        pause_suppress()
 
         if btnp(0) then
             last_key_pressed = KEYS.LEFT

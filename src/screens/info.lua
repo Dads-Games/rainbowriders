@@ -45,14 +45,13 @@ function Info(state)
     end
 
     function controller()
-        if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
-        if (keypress == 'p') poke(0x5f30,1) --suppress 'p' for pause
+        pause_suppress()
 
         if (btnp(6)) then
             state.screen = screens.title
         end
 
-        scroll_y -= scroll_speed  -- Move the scroll position up
+        scroll_y = scroll_y - scroll_speed  -- Move the scroll position up
         
         -- Reset to the bottom if the last object has scrolled off-screen
         if scroll_y < -#objects * 48 then

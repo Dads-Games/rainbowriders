@@ -1,0 +1,1 @@
+function pause_suppress()if btnp(6)then poke(0x5f30,1)end;if keypress=='p'then poke(0x5f30,1)end end

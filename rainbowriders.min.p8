@@ -3,225 +3,29 @@ version 42
 __lua__
 -- rainbow riders
 -- dads' games
-
--- UTILITIES
-#include src/utils/throttle.lua
-#include src/utils/colors.lua
-#include src/utils/special_effects.lua
-#include src/utils/rbp_rainbow.lua
-#include src/utils/math.lua
-#include src/utils/sequencer.lua
-#include src/utils/printc.lua
-#include src/utils/enterprise.lua
-#include src/utils/xwing.lua
-#include src/utils/pegasus_parade.lua
-#include src/utils/pause_suppress.lua
-#include src/utils/multi_tone_print.lua
-
--- SCREENS
-#include src/screens/title.lua
-#include src/screens/character_select.lua
-#include src/screens/game_over.lua
-#include src/screens/get_ready.lua
-#include src/screens/credits.lua
-#include src/screens/info.lua
-
--- SCREEN: GAME
-#include src/screens/game.lua
-#include src/screens/game/cloud_system.lua
-#include src/screens/game/aircraft_system.lua
-#include src/screens/game/alien_ship.lua
-
--- GLOBAL CONSTANTS
-KRIDERS = {
-    {
-        name = "lizzie",
-        sprite = 1
-    },
-    {
-        name =  "lily",
-        sprite = 2
-    },
-    {
-        name =  "riker",
-        sprite = 3
-    },
-    {
-        name =  "lukas",
-        sprite = 4
-    },
-    {
-        name =  "maverick",
-        sprite = 5
-    },
-    {
-        name = "michael",
-        sprite = 6
-    }
-}
-
-PRIDERS = {
-    {
-        name = "francis",
-        sprite = 8
-    },
-    {
-        name =  "sara",
-        sprite = 9
-    },
-    {
-        name =  "tiffany",
-        sprite = 10
-    },
-    {
-        name =  "jon",
-        sprite = 11
-    },
-    {
-        name =  "amanda",
-        sprite = 12
-    },
-    {
-        name = "berkeley",
-        sprite = 13
-    },
-    {
-        name = "alien",
-        sprite = 14
-    }
-}
-
--- GAME STATE
-function GameState ()
-    return {
-        screen = nil,
-        debug_mode = false,
-        daytime = true,
-        konami = false,
-        player = {
-            x = 16,
-            y = 104,
-            dy = 0,
-            jump_strength = -4,
-            gravity = 0.4,
-            on_ground = true,
-            rider = 1,
-            width = 6, -- Tighter collision box width
-            height = 6, -- Tighter collision box height
-            oscillation = 0 --Variable for oscillation
-        },
-        high_score = 0,
-        score = 0,
-        konami_mode = false,
-
-        toggleDebugMode = function (self)
-            self.debug_mode = not self.debug_mode
-        end,
-        
-        toggleDaynight = function (self)
-            self.daytime = not self.daytime
-        end,
-
-        toggleKonami = function (self)
-            self.konami = not self.konami
-
-        end
-    }
-end
-
--- INSTANTIATE GAME STATE
-state = GameState()
-
--- SCREENS
-screens = {
-    title            = TitleScreen(state),
-    character_select = CharacterSelect(state),
-    get_ready        = GetReady(state),
-    game             = Game(state),
-    game_over        = GameOver(state),
-    credits          = Credits(state),
-    info             = Info(state)
-}
-
--- Timer variables
-timer = 0
-timer_frame_counter = 0
-
-function _init()
-    state.screen = screens.title
-
-    cartdata("dads_rr_1")
-    state.high_score = dget(0)
-    menuitem(1, "reset high score",
-    function()
-        state.score = 0
-        state.high_score = 0
-        dset(0,0)
-    end
-    )
-    menuitem(2, "debug toggle",
-    function()
-        state:toggleDebugMode()
-    end
-    )
-    menuitem(3, "daynight toggle",
-    function()
-        state:toggleDaynight()
-    end
-    )
-    menuitem(4, "konmai toggle",
-    function()
-        state:toggleKonami()
-    end
-    )
-end
-
-function _update()
-    if state.screen and state.screen.controller then
-        state.screen.controller()
-    end
-end
-
-function _draw()
-    cls()
-    if state.screen and state.screen.view then
-        state.screen.view()
-    end
-
-    -- this must be last
-    if state.debug_mode == true then
-        print("D", 1, 1, 7)
-    end
-    if state.screen and state.screen.controller then
-        state.screen.controller()
-    end
-end
-
-function _draw()
-    cls()
-    if state.screen and state.screen.view then
-        state.screen.view()
-    end
-
-    -- this must be last
-    if state.debug_mode == true then
-        print("D", 1, 1, 7)
-    end
-end
-
-
-
-function _draw()
-    cls()
-
-    state.screen.view()
-
-    --this must be last
-    if state.debug_mode == true then
-        print("D", 1,1,7)
-    end
-end
-
+#include src/utils/throttle.min.lua
+#include src/utils/colors.min.lua
+#include src/utils/special_effects.min.lua
+#include src/utils/rbp_rainbow.min.lua
+#include src/utils/math.min.lua
+#include src/utils/sequencer.min.lua
+#include src/utils/printc.min.lua
+#include src/utils/enterprise.min.lua
+#include src/utils/xwing.min.lua
+#include src/utils/pegasus_parade.min.lua
+#include src/utils/pause_suppress.min.lua
+#include src/utils/multi_tone_print.min.lua
+#include src/screens/title.min.lua
+#include src/screens/character_select.min.lua
+#include src/screens/game_over.min.lua
+#include src/screens/get_ready.min.lua
+#include src/screens/credits.min.lua
+#include src/screens/info.min.lua
+#include src/screens/game.min.lua
+#include src/screens/game/cloud_system.min.lua
+#include src/screens/game/aircraft_system.min.lua
+#include src/screens/game/alien_ship.min.lua
+KRIDERS={{name="lizzie",sprite=1},{name="lily",sprite=2},{name="riker",sprite=3},{name="lukas",sprite=4},{name="maverick",sprite=5},{name="michael",sprite=6}}PRIDERS={{name="francis",sprite=8},{name="sara",sprite=9},{name="tiffany",sprite=10},{name="jon",sprite=11},{name="amanda",sprite=12},{name="berkeley",sprite=13},{name="alien",sprite=14}}function GameState()return{screen=nil,debug_mode=false,daytime=true,konami=false,player={x=16,y=104,dy=0,jump_strength=-4,gravity=0.4,on_ground=true,rider=1,width=6,height=6,oscillation=0},high_score=0,score=0,konami_mode=false,toggleDebugMode=function(self)self.debug_mode=not self.debug_mode end,toggleDaynight=function(self)self.daytime=not self.daytime end,toggleKonami=function(self)self.konami=not self.konami end}end;state=GameState()screens={title=TitleScreen(state),character_select=CharacterSelect(state),get_ready=GetReady(state),game=Game(state),game_over=GameOver(state),credits=Credits(state),info=Info(state)}timer=0;timer_frame_counter=0;function _init()state.screen=screens.title;cartdata("dads_rr_1")state.high_score=dget(0)menuitem(1,"reset high score",function()state.score=0;state.high_score=0;dset(0,0)end)menuitem(2,"debug toggle",function()state:toggleDebugMode()end)menuitem(3,"daynight toggle",function()state:toggleDaynight()end)menuitem(4,"konmai toggle",function()state:toggleKonami()end)end;function _update()if state.screen and state.screen.controller then state.screen.controller()end end;function _draw()cls()if state.screen and state.screen.view then state.screen.view()end;if state.debug_mode==true then print("D",1,1,7)end;if state.screen and state.screen.controller then state.screen.controller()end end;function _draw()cls()if state.screen and state.screen.view then state.screen.view()end;if state.debug_mode==true then print("D",1,1,7)end end;function _draw()cls()state.screen.view()if state.debug_mode==true then print("D",1,1,7)end end
 __gfx__
 000000000000000000000000000000000000000000000000004f000000000000004f000000af0000002f0000004f0000004f0000004f00000000000000000000
 00000000004f000000af0000004f0000004f00000004f00004f400000000000000f400000aff000002ff000000f4000004ff000004ff00000055500000000000

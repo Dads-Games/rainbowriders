@@ -1,0 +1,1 @@
+function printc(a,b,c,d)local e=128;local f=4;local g=5;local h=0;for i=1,#a do local j=sub(a,i,i)if j==" "then h=h+g else h=h+f end end;local k=flr((e-h)/2)print(a,k,c,d)end
