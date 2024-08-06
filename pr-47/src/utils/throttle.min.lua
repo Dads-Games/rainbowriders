@@ -1,0 +1,1 @@
+function throttle(a,b)local c=0;return function(...)local d=time()if d-c>=b then c=d;return a(...)end end end
