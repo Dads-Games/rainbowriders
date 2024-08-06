@@ -167,7 +167,7 @@ function Game(state)
                 obstacle.x and player.y < obstacle.y + obstacle.height and
                 player.y + 8 > obstacle.y then
                 music(-1) -- game over track
-                state.screen = screens.game_over
+                state.screen = GameOver(state)
                 del(obstacles, obstacle)
             end
         end
