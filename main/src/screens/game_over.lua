@@ -22,8 +22,17 @@ function GameOver (state)
         cls()
         -- Check high score and display if beat
         if state.score > state.high_score then
-            printc("you set the new high score!", 15, 60, 7)
-            printc("high score: "..state.score.." great job!", 15, 80, 7)
+            --printc("you set the new high score!", 15, 60, 7)
+            multi_tone_print("you set the new high score!", 10, 40, {
+                {color = 8, height = 1},
+                {color = 9, height = 1},
+                {color = 10, height = 1},
+                {color = 11, height = 1},
+                {color = 12, height = 1}
+            })
+            printc(""..state.score.."", 15, 55, 7)
+            
+            printc("play again and beat it!", 15, 70, 7)
          
         -- Display the score on the game over screen
         elseif state.score > 0 then
