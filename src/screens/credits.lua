@@ -32,8 +32,7 @@ function Credits (state)
   end
 
   function credits_controller()
-    if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
-    if (keypress == 'p') poke(0x5f30,1) --suppress 'p' for pause
+    pause_suppress()
       -- Scroll down
       scroll_pos = scroll_pos - speed
       -- Return to title screen if credits finish or upon pressing a button

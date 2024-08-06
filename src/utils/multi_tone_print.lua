@@ -33,7 +33,7 @@ function multi_tone_print(text, x, y, tone_settings)
 
     -- Calculate total height percentage
     for _, setting in ipairs(tone_settings) do
-        total_height += setting.height
+        total_height = total_height + setting.height
     end
 
     -- Print text for each tone setting
@@ -54,7 +54,7 @@ function multi_tone_print(text, x, y, tone_settings)
         print(text, x, y, color)
 
         -- Update current height
-        current_height += pixels
+        current_height = current_height + pixels
     end
 
     -- Reset clipping

@@ -60,8 +60,8 @@ function WarpDriveTrail ()
     function warpDriveTrail:update (x, y)
         -- loop through all particles
         for particle in all(particles) do
-            particle.life -= rnd(0.1)
-            particle.x += particle.speed
+            particle.life = particle.life - rnd(0.1)
+            particle.x = particle.x + particle.speed
 
             if particle.life <= 0 then
                 del(particles, particle)
@@ -98,7 +98,7 @@ function WarpDriveTrail ()
 
             -- if the y is above or below the particles y, offset the x by + 2
             if y < particle.y or y > particle.y then
-                x += 1+ rnd(3)
+                x = x + 1 + rnd(3)
             end
 
             pset(x, y, color_based_on_percent)

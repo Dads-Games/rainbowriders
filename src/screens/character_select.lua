@@ -5,7 +5,7 @@ function CharacterSelect(state)
         local selected_rider_index = state.player.rider
         local next_rider_index = min(#RIDERS, selected_rider_index + 1)
         local prev_rider_index = max(1, selected_rider_index - 1)
-        if (btnp(6)) poke(0x5f30,1) --suppress start button for pause
+        pause_suppress()
 
         -- button: left
         if btnp(0) then

@@ -1,0 +1,1 @@
+function multi_tone_print(a,b,c,d)local e=#a*4;local f=5;local g=0;local h=0;for i,j in ipairs(d)do g=g+j.height end;for k,j in ipairs(d)do local l=j.color;local m=j.height/g;local n=flr(f*m+0.5)if k==#d then n=f-h end;clip(b,c+h,e,n)print(a,b,c,l)h=h+n end;clip()end

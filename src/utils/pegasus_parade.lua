@@ -54,9 +54,9 @@ function PegasusParade (zone)
     function update_particles()
         for i = #particles, 1, -1 do
             local p = particles[i]
-            p.x += p.dx
-            p.y += p.dy
-            p.life -= 1
+            p.x = p.x + p.dx
+            p.y = p.y + p.dy
+            p.life = p.life - 1
             if p.life <= 0 then
                 deli(particles, i)
             end
@@ -115,9 +115,9 @@ function PegasusParade (zone)
                 hop_duration = flr(rnd(c.hop_duration_max - c.hop_duration_min) + c.hop_duration_min),
                 hop_timer = rnd(c.hop_duration_max),
                 draw = function(self)
-                    self.x += self.speed
+                    self.x = self.x + self.speed
                     
-                    self.hop_timer += 1
+                    self.hop_timer = self.hop_timer + 1
                     if self.hop_timer >= self.hop_duration then
                         self.hop_timer = 0
                     end

@@ -254,7 +254,7 @@ function Game(state)
             if animation >= timing then
                 animation = 0
             else
-                animation += 1
+                animation = animation + 1
             end
         end
         

@@ -1,0 +1,1 @@
+function SpecialEffect()local a=0;local b=function()a=a+1;if a>1000 then a=0 end end;local c=function(d,e,f)b()local g=d[flr(a/e)%#d+1]f(g,flr(a/e)%#d+1)end;local h=function(e,f)b()local i=flr(a/e)%2;f(i,flr(a/e)%2)end;return{cycle=c,blink=h}end
