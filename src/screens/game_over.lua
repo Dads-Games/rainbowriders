@@ -1,9 +1,14 @@
 function GameOver (state)
     local game_over_timer = 0
     local game_over_timer = 0
-    local game_over_delay = 60 -- 1 second (60 frames per second)
+    local game_over_delay = 90 -- 1 second (60 frames per second)
+    local music_playing = false
 
     function game_over_controller ()
+        if not music_playing then
+            music_playing = true
+            music(0)
+        end
         -- Increment game over timer
         game_over_timer = game_over_timer + 1
         if game_over_timer > game_over_delay then

@@ -71,17 +71,12 @@ function Game(state)
 
                 -- else if state.score > 500 then trigger enterprise
             elseif state.score % ufoScoreMod < scoreThreshold then
-                enterpriseTrigger()
-                xwingTrigger()
+                alienShipTrigger()
             elseif state.score % xwingScoreMod < scoreThreshold then
                 xwingTrigger()
             elseif state.score % enterpriseScoreMod < scoreThreshold then
                 enterpriseTrigger()
             end
-        end
-
-        if (state.score > 35 and state.score < 40) then
-            alienShipTrigger()
         end
 
         crafts.update()
@@ -239,6 +234,10 @@ function Game(state)
         -- Draw grass
         for blade in all(grass) do spr(blade.sprite, blade.x, blade.y) end
 
+        enterprise.view()
+        alienShip.view()
+        xwing.view()
+        
         -- Draw player
         local rider_sprite = RIDERS[player.rider].sprite
         --if rider_sprite == 13 then
@@ -271,16 +270,12 @@ function Game(state)
         -- Draw the timer
         --print(timer, 115, 5, 7)
 
-        enterprise.view()
-        alienShip.view()
-        xwing.view()
-
         -- Draw the score at the bottom left
         print("score: " .. state.score, 5, 122, 7)
 
         -- Draw high score at the bottom right
         print("high score: " .. state.high_score, 60, 122, 7)
-        print(animation, 30,30,7)
+       
     end
 
     return {view = game_view, controller = game_controller}
